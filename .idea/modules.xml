@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/P4Client/ClientWordGuessSpring2020.iml" filepath="$PROJECT_DIR$/P4Client/ClientWordGuessSpring2020.iml" />
+      <module fileurl="file://$PROJECT_DIR$/P4Server/ServerWordGuessSpring2020.iml" filepath="$PROJECT_DIR$/P4Server/ServerWordGuessSpring2020.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/wordGuessTemplates.iml" filepath="$PROJECT_DIR$/.idea/wordGuessTemplates.iml" />
+    </modules>
+  </component>
+</project>
