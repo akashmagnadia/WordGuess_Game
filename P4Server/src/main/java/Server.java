@@ -21,6 +21,8 @@ public class Server {
         server.start();
     }
 
+
+
     public class TheServer extends Thread {
         int port;
 
@@ -100,11 +102,14 @@ public class Server {
 
                         //update player info in client thread array
                         ClientThread tempThread = clients.get(receivedInfo.clientNumber - 1);
-                        tempThread.clientInfo = receivedInfo;
 
-                        callBack.accept("Recieved something from Player " + receivedInfo.clientNumber);
+                        //after performing the logic
+                        tempThread.clientInfo = performLogic(receivedInfo);
 
-                        out.writeUnshared(receivedInfo); //test
+                        callBack.accept("Received something from Player " + receivedInfo.clientNumber);
+
+                        //return logic performed info to send it back to client
+                        out.writeUnshared(tempThread.clientInfo); //test with writeUnshared
 //                        out.writeObject(receivedInfo);
                     }
                     catch(Exception e) {
@@ -115,6 +120,30 @@ public class Server {
                 }
             } //end of run
 
+            public GameInfo performLogic(GameInfo receivedInfo) {
+
+                if (receivedInfo.playingCategoryOne) {
+
+                } else if (receivedInfo.playingCategoryTwo) {
+
+                } else if (receivedInfo.playingCategoryThree) {
+
+                } else {
+                    System.out.println("This shouldn't happen");
+                }
+                return receivedInfo;
+            }
+
+
+            public void send(GameInfo info, String message) {
+                try {
+                    out.writeObject(info);
+                    callBack.accept(message);
+                    System.out.println(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         } //end of client thread
     }
 }
