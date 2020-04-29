@@ -69,8 +69,7 @@ public class WordGuessClient extends Application {
 	ImageView firstBox, secondBox, thirdBox, fourthBox, fifthBox, sixthBox, seventhBox, eighthBox, ninthBox, tenthBox;
 	
 	MediaPlayer mediaPlayer;
-	
-	GameInfo myPlayerInfo;
+
 	int port;
 	String ip;
 	Client clientConnection;
@@ -115,6 +114,8 @@ public class WordGuessClient extends Application {
 				System.exit(0);
 			}
 		});
+
+		listenForCategory();
 	}
 	
 
@@ -137,7 +138,7 @@ public class WordGuessClient extends Application {
 	}
 
 	public void playGame() {
-		clientConnection.send(myPlayerInfo, "Sending Player Info");
+		clientConnection.send(clientConnection.myPlayerInfo, "Sending Player Info");
 	}
 	
 	/* First scene is where the client is prompted to enter IP and Port # to connect to server and begin game */
@@ -339,5 +340,32 @@ public class WordGuessClient extends Application {
 		mediaPlayer = new MediaPlayer(h);
 		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 		mediaPlayer.play();
+	}
+
+	public void listenForCategory() {
+		states.setOnAction(event -> {
+			clientConnection.myPlayerInfo.playingStatesCategory = true;
+			clientConnection.myPlayerInfo.playingFoodCategory = false;
+			clientConnection.myPlayerInfo.playingAnimalsCategory = false;
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on States category");
+		});
+
+		food.setOnAction(event -> {
+			clientConnection.myPlayerInfo.playingStatesCategory = false;
+			clientConnection.myPlayerInfo.playingFoodCategory = true;
+			clientConnection.myPlayerInfo.playingAnimalsCategory = false;
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Food category");
+		});
+
+		animals.setOnAction(event -> {
+			clientConnection.myPlayerInfo.playingStatesCategory = false;
+			clientConnection.myPlayerInfo.playingFoodCategory = false;
+			clientConnection.myPlayerInfo.playingAnimalsCategory = true;
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Animals category");
+		});
+	}
+
+	public void listenForLetter() {
+
 	}
 }

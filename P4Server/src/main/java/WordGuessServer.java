@@ -9,7 +9,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -57,11 +56,12 @@ public class WordGuessServer extends Application {
 		/* Initialize the scene */
 		primaryStage.setScene(sceneMap.get("serverStart"));
 		primaryStage.show();
-		
-		
+
+		connectTheServer();
 	}
 
 	public void connectTheServer() {
+
 		try {
 			serverConnection = new Server(data -> Platform.runLater(()->
 			{
@@ -74,7 +74,7 @@ public class WordGuessServer extends Application {
 
 		serverConnection.server.port = 5555; //default
 		//TODO: After getting server port is figured out
-//		serverConnection.server.port = Integer.parseInt(portInput.getText());
+//		serverConnection.server.port = Integer.parseInt(portSelect.getText());
 	}
 
 	public void updateUIForServer() {
@@ -171,5 +171,151 @@ public class WordGuessServer extends Application {
 		
 		gameplay.getChildren().addAll(triangle,gameHost,serverLog);
 		return new Scene(gameplay, 970, 700);
+	}
+
+	public GameInfo performLogic(GameInfo receivedInfo) {
+
+		if (receivedInfo.playingAnimalsCategory) {
+			return checkLetterClicked("Animals", receivedInfo);
+		} else if (receivedInfo.playingFoodCategory) {
+			return checkLetterClicked("Food", receivedInfo);
+		} else if (receivedInfo.playingStatesCategory) {
+			return checkLetterClicked("States", receivedInfo);
+		} else {
+			System.out.println("This shouldn't happen");
+		}
+		return receivedInfo;
+	}
+
+	public GameInfo checkLetterClicked(String category, GameInfo receivedInfo) {
+		if (receivedInfo.selectedLetter[0]) {
+			return checkLetterClickedHelper(category, "a", receivedInfo);
+		} else if (receivedInfo.selectedLetter[1]) {
+			return checkLetterClickedHelper(category, "b", receivedInfo);
+		} else if (receivedInfo.selectedLetter[2]) {
+			return checkLetterClickedHelper(category, "c", receivedInfo);
+		} else if (receivedInfo.selectedLetter[3]) {
+			return checkLetterClickedHelper(category, "d", receivedInfo);
+		} else if (receivedInfo.selectedLetter[4]) {
+			return checkLetterClickedHelper(category, "e", receivedInfo);
+		} else if (receivedInfo.selectedLetter[5]) {
+			return checkLetterClickedHelper(category, "f", receivedInfo);
+		} else if (receivedInfo.selectedLetter[6]) {
+			return checkLetterClickedHelper(category, "g", receivedInfo);
+		} else if (receivedInfo.selectedLetter[7]) {
+			return checkLetterClickedHelper(category, "h", receivedInfo);
+		} else if (receivedInfo.selectedLetter[8]) {
+			return checkLetterClickedHelper(category, "i", receivedInfo);
+		} else if (receivedInfo.selectedLetter[9]) {
+			return checkLetterClickedHelper(category, "j", receivedInfo);
+		} else if (receivedInfo.selectedLetter[10]) {
+			return checkLetterClickedHelper(category, "k", receivedInfo);
+		} else if (receivedInfo.selectedLetter[11]) {
+			return checkLetterClickedHelper(category, "l", receivedInfo);
+		} else if (receivedInfo.selectedLetter[12]) {
+			return checkLetterClickedHelper(category, "m", receivedInfo);
+		} else if (receivedInfo.selectedLetter[13]) {
+			return checkLetterClickedHelper(category, "n", receivedInfo);
+		} else if (receivedInfo.selectedLetter[14]) {
+			return checkLetterClickedHelper(category, "o", receivedInfo);
+		} else if (receivedInfo.selectedLetter[15]) {
+			return checkLetterClickedHelper(category, "p", receivedInfo);
+		} else if (receivedInfo.selectedLetter[16]) {
+			return checkLetterClickedHelper(category, "q", receivedInfo);
+		} else if (receivedInfo.selectedLetter[17]) {
+			return checkLetterClickedHelper(category, "r", receivedInfo);
+		} else if (receivedInfo.selectedLetter[18]) {
+			return checkLetterClickedHelper(category, "s", receivedInfo);
+		} else if (receivedInfo.selectedLetter[19]) {
+			return checkLetterClickedHelper(category, "t", receivedInfo);
+		} else if (receivedInfo.selectedLetter[20]) {
+			return checkLetterClickedHelper(category, "u", receivedInfo);
+		} else if (receivedInfo.selectedLetter[21]) {
+			return checkLetterClickedHelper(category, "v", receivedInfo);
+		} else if (receivedInfo.selectedLetter[22]) {
+			return checkLetterClickedHelper(category, "w", receivedInfo);
+		} else if (receivedInfo.selectedLetter[23]) {
+			return checkLetterClickedHelper(category, "x", receivedInfo);
+		} else if (receivedInfo.selectedLetter[24]) {
+			return checkLetterClickedHelper(category, "y", receivedInfo);
+		} else if (receivedInfo.selectedLetter[25]) {
+			return checkLetterClickedHelper(category, "z", receivedInfo);
+		} else {
+			System.out.println("In check letter Clicked: This shouldn't happen");
+			return receivedInfo;
+		}
+	}
+
+	public GameInfo checkLetterClickedHelper(String category, String letter, GameInfo receivedInfo) {
+		if (category.equals("Animals")) {
+			if (!receivedInfo.animalsCategory_WordOneSolved) {
+				int index = receivedInfo.animalsCategory_WordOne.indexOf(letter);
+				if (index == -1) {
+					receivedInfo.guessLeft--;
+					receivedInfo.indexOfLetter = index;
+				}
+			} else if (!receivedInfo.animalsCategory_WordTwoSolved) {
+				int index = receivedInfo.animalsCategory_WordTwo.indexOf(letter);
+				if (index == -1) {
+					receivedInfo.guessLeft--;
+					receivedInfo.indexOfLetter = index;
+				}
+			} else if (!receivedInfo.animalsCategory_WordThreeSolved) {
+				int index = receivedInfo.animalsCategory_WordThree.indexOf(letter);
+				if (index == -1) {
+					receivedInfo.guessLeft--;
+					receivedInfo.indexOfLetter = index;
+				}
+			} else {
+				System.out.println("In Animals Category: This shouldn't happen");
+			}
+		} else if (category.equals("Food")) {
+			if (!receivedInfo.foodCategory_WordOneSolved) {
+				int index = receivedInfo.foodCategory_WordOne.indexOf(letter);
+				if (index == -1) {
+					receivedInfo.guessLeft--;
+					receivedInfo.indexOfLetter = index;
+				}
+			} else if (!receivedInfo.foodCategory_WordTwoSolved) {
+				int index = receivedInfo.foodCategory_WordTwo.indexOf(letter);
+				if (index == -1) {
+					receivedInfo.guessLeft--;
+					receivedInfo.indexOfLetter = index;
+				}
+			} else if (!receivedInfo.foodCategory_WordThreeSolved) {
+				int index = receivedInfo.foodCategory_WordThree.indexOf(letter);
+				if (index == -1) {
+					receivedInfo.guessLeft--;
+					receivedInfo.indexOfLetter = index;
+				}
+			} else {
+				System.out.println("In Food Category: This shouldn't happen");
+			}
+		} else if (category.equals("States")) {
+			if (!receivedInfo.statesCategory_WordOneSolved) {
+				int index = receivedInfo.statesCategory_WordOne.indexOf(letter);
+				if (index == -1) {
+					receivedInfo.guessLeft--;
+					receivedInfo.indexOfLetter = index;
+				}
+			} else if (!receivedInfo.statesCategory_WordTwoSolved) {
+				int index = receivedInfo.statesCategory_WordTwo.indexOf(letter);
+				if (index == -1) {
+					receivedInfo.guessLeft--;
+					receivedInfo.indexOfLetter = index;
+				}
+			} else if (!receivedInfo.statesCategory_WordThreeSolved) {
+				int index = receivedInfo.statesCategory_WordThree.indexOf(letter);
+				if (index == -1) {
+					receivedInfo.guessLeft--;
+					receivedInfo.indexOfLetter = index;
+				}
+			} else {
+				System.out.println("In States Category: This shouldn't happen");
+			}
+		} else {
+			System.out.println("In checking letter clicked: This shouldn't happen");
+		}
+		return receivedInfo;
 	}
 }

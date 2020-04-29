@@ -104,7 +104,7 @@ public class Server {
                         ClientThread tempThread = clients.get(receivedInfo.clientNumber - 1);
 
                         //after performing the logic
-                        tempThread.clientInfo = performLogic(receivedInfo);
+//                        tempThread.clientInfo = performLogic(receivedInfo);
 
                         callBack.accept("Received something from Player " + receivedInfo.clientNumber);
 
@@ -122,11 +122,11 @@ public class Server {
 
             public GameInfo performLogic(GameInfo receivedInfo) {
 
-                if (receivedInfo.playingCategoryOne) {
+                if (receivedInfo.playingAnimalsCategory) {
 
-                } else if (receivedInfo.playingCategoryTwo) {
+                } else if (receivedInfo.playingFoodCategory) {
 
-                } else if (receivedInfo.playingCategoryThree) {
+                } else if (receivedInfo.playingStatesCategory) {
 
                 } else {
                     System.out.println("This shouldn't happen");

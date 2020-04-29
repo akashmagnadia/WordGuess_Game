@@ -1,48 +1,53 @@
 public class GameInfo {
     int clientNumber = -1;
-    String categoryOne = "categoryOne";
-    String categoryTwo = "categoryTwo";
-    String categoryThree = "categoryThree";
+    String animalsCategory = "Animals";
+    String foodCategory = "Food";
+    String statesCategory = "States";
 
     //as the user guesses the word, the char array will be filled with the letters
-    String categoryOne_WordOne = "wordOne";
-    char[] categoryOne_WordOneArray = new char[categoryOne_WordOne.length()];
-    String categoryOne_WordTwo = "wordTwo";
-    char[] categoryOne_WordTwoArray = new char[categoryOne_WordTwo.length()];
-    String categoryOne_WordThree = "wordThree";
-    char[] categoryOne_WordThreeArray = new char[categoryOne_WordThree.length()];
+    String animalsCategory_WordOne = "wordOne";
+    char[] animalsCategory_WordOneArray = new char[animalsCategory_WordOne.length()];
+    String animalsCategory_WordTwo = "wordTwo";
+    char[] animalsCategory_WordTwoArray = new char[animalsCategory_WordTwo.length()];
+    String animalsCategory_WordThree = "wordThree";
+    char[] animalsCategory_WordThreeArray = new char[animalsCategory_WordThree.length()];
 
-    String categoryTwo_WordOne = "wordOne";
-    char[] categoryTwo_WordOneArray = new char[categoryTwo_WordOne.length()];
-    String categoryTwo_WordTwo = "wordTwo";
-    char[] categoryTwo_WordTwoArray = new char[categoryTwo_WordTwo.length()];
-    String categoryTwo_WordThree = "wordThree";
-    char[] categoryTwo_WordThreeArray = new char[categoryTwo_WordThree.length()];
+    String foodCategory_WordOne = "wordOne";
+    char[] foodCategory_WordOneArray = new char[foodCategory_WordOne.length()];
+    String foodCategory_WordTwo = "wordTwo";
+    char[] foodCategory_WordTwoArray = new char[foodCategory_WordTwo.length()];
+    String foodCategory_WordThree = "wordThree";
+    char[] foodCategory_WordThreeArray = new char[foodCategory_WordThree.length()];
 
-    String categoryThree_WordOne = "wordOne";
-    char[] categoryThree_WordOneArray = new char[categoryThree_WordOne.length()];
-    String categoryThree_WordTwo = "wordTwo";
-    char[] categoryThree_WordTwoArray = new char[categoryThree_WordTwo.length()];
-    String categoryThree_WordThree = "wordThree";
-    char[] categoryThree_WordThreeArray = new char[categoryThree_WordThree.length()];
+    String statesCategory_WordOne = "wordOne";
+    char[] statesCategory_WordOneArray = new char[statesCategory_WordOne.length()];
+    String statesCategory_WordTwo = "wordTwo";
+    char[] statesCategory_WordTwoArray = new char[statesCategory_WordTwo.length()];
+    String statesCategory_WordThree = "wordThree";
+    char[] statesCategory_WordThreeArray = new char[statesCategory_WordThree.length()];
 
-    Boolean playingCategoryOne = false;
-    Boolean categoryOneSolved = false;
-    Boolean categoryOne_WordOneSolved = false;
-    Boolean categoryOne_WordTwoSolved = false;
-    Boolean categoryOne_WordThreeSolved = false;
+    Boolean playingAnimalsCategory = false;
+    Boolean animalsCategorySolved = false;
+    Boolean animalsCategory_WordOneSolved = false;
+    Boolean animalsCategory_WordTwoSolved = false;
+    Boolean animalsCategory_WordThreeSolved = false;
 
-    Boolean playingCategoryTwo = false;
-    Boolean categoryTwoSolved = false;
-    Boolean categoryTwo_WordOneSolved = false;
-    Boolean categoryTwo_WordTwoSolved = false;
-    Boolean categoryTwo_WordThreeSolved = false;
+    Boolean playingFoodCategory = false;
+    Boolean foodCategorySolved = false;
+    Boolean foodCategory_WordOneSolved = false;
+    Boolean foodCategory_WordTwoSolved = false;
+    Boolean foodCategory_WordThreeSolved = false;
 
-    Boolean playingCategoryThree = false;
-    Boolean categoryThreeSolved = false;
-    Boolean categoryThree_WordOneSolved = false;
-    Boolean categoryThree_WordTwoSolved = false;
-    Boolean categoryThree_WordThreeSolved = false;
+    Boolean playingStatesCategory = false;
+    Boolean statesCategorySolved = false;
+    Boolean statesCategory_WordOneSolved = false;
+    Boolean statesCategory_WordTwoSolved = false;
+    Boolean statesCategory_WordThreeSolved = false;
+
+    int guessLeft = 6;
+    Boolean[] selectedLetter = new Boolean[26]; //26 for 26 letters
+
+    int indexOfLetter = -2;
 }
 
 //    // Creating array of string length
