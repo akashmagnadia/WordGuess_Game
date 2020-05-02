@@ -173,18 +173,26 @@ public class WordGuessServer extends Application {
 		return new Scene(gameplay, 970, 700);
 	}
 
-	public GameInfo performLogic(GameInfo receivedInfo) {
+	public GameInfo updateIndexOfLetter(GameInfo receivedInfo) {
+		//run this function when letter is clicked, which will update indexOfLetter and return it
 
+		GameInfo toReturnInfo = receivedInfo;
 		if (receivedInfo.playingAnimalsCategory) {
-			return checkLetterClicked("Animals", receivedInfo);
+			toReturnInfo = checkLetterClicked("Animals", receivedInfo);
 		} else if (receivedInfo.playingFoodCategory) {
-			return checkLetterClicked("Food", receivedInfo);
+			toReturnInfo = checkLetterClicked("Food", receivedInfo);
 		} else if (receivedInfo.playingStatesCategory) {
-			return checkLetterClicked("States", receivedInfo);
+			toReturnInfo = checkLetterClicked("States", receivedInfo);
 		} else {
 			System.out.println("This shouldn't happen");
 		}
-		return receivedInfo;
+		return toReturnInfo;
+
+		//indexOfLetter will be changing,
+		//set to -2 to reset
+		//-2 means nothing has been changed
+		//-1 means index is not found
+		//otherwise letter found at that index which is stored in indexOfLetter
 	}
 
 	public GameInfo checkLetterClicked(String category, GameInfo receivedInfo) {
@@ -252,20 +260,20 @@ public class WordGuessServer extends Application {
 				int index = receivedInfo.animalsCategory_WordOne.indexOf(letter);
 				if (index == -1) {
 					receivedInfo.guessLeft--;
-					receivedInfo.indexOfLetter = index;
 				}
+				receivedInfo.indexOfLetter = index;
 			} else if (!receivedInfo.animalsCategory_WordTwoSolved) {
 				int index = receivedInfo.animalsCategory_WordTwo.indexOf(letter);
 				if (index == -1) {
 					receivedInfo.guessLeft--;
-					receivedInfo.indexOfLetter = index;
 				}
+				receivedInfo.indexOfLetter = index;
 			} else if (!receivedInfo.animalsCategory_WordThreeSolved) {
 				int index = receivedInfo.animalsCategory_WordThree.indexOf(letter);
 				if (index == -1) {
 					receivedInfo.guessLeft--;
-					receivedInfo.indexOfLetter = index;
 				}
+				receivedInfo.indexOfLetter = index;
 			} else {
 				System.out.println("In Animals Category: This shouldn't happen");
 			}
@@ -274,20 +282,20 @@ public class WordGuessServer extends Application {
 				int index = receivedInfo.foodCategory_WordOne.indexOf(letter);
 				if (index == -1) {
 					receivedInfo.guessLeft--;
-					receivedInfo.indexOfLetter = index;
 				}
+				receivedInfo.indexOfLetter = index;
 			} else if (!receivedInfo.foodCategory_WordTwoSolved) {
 				int index = receivedInfo.foodCategory_WordTwo.indexOf(letter);
 				if (index == -1) {
 					receivedInfo.guessLeft--;
-					receivedInfo.indexOfLetter = index;
 				}
+				receivedInfo.indexOfLetter = index;
 			} else if (!receivedInfo.foodCategory_WordThreeSolved) {
 				int index = receivedInfo.foodCategory_WordThree.indexOf(letter);
 				if (index == -1) {
 					receivedInfo.guessLeft--;
-					receivedInfo.indexOfLetter = index;
 				}
+				receivedInfo.indexOfLetter = index;
 			} else {
 				System.out.println("In Food Category: This shouldn't happen");
 			}
@@ -296,20 +304,20 @@ public class WordGuessServer extends Application {
 				int index = receivedInfo.statesCategory_WordOne.indexOf(letter);
 				if (index == -1) {
 					receivedInfo.guessLeft--;
-					receivedInfo.indexOfLetter = index;
 				}
+				receivedInfo.indexOfLetter = index;
 			} else if (!receivedInfo.statesCategory_WordTwoSolved) {
 				int index = receivedInfo.statesCategory_WordTwo.indexOf(letter);
 				if (index == -1) {
 					receivedInfo.guessLeft--;
-					receivedInfo.indexOfLetter = index;
 				}
+				receivedInfo.indexOfLetter = index;
 			} else if (!receivedInfo.statesCategory_WordThreeSolved) {
 				int index = receivedInfo.statesCategory_WordThree.indexOf(letter);
 				if (index == -1) {
 					receivedInfo.guessLeft--;
-					receivedInfo.indexOfLetter = index;
 				}
+				receivedInfo.indexOfLetter = index;
 			} else {
 				System.out.println("In States Category: This shouldn't happen");
 			}

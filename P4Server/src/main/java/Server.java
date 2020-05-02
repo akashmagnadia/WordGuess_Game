@@ -120,21 +120,6 @@ public class Server {
                 }
             } //end of run
 
-            public GameInfo performLogic(GameInfo receivedInfo) {
-
-                if (receivedInfo.playingAnimalsCategory) {
-
-                } else if (receivedInfo.playingFoodCategory) {
-
-                } else if (receivedInfo.playingStatesCategory) {
-
-                } else {
-                    System.out.println("This shouldn't happen");
-                }
-                return receivedInfo;
-            }
-
-
             public void send(GameInfo info, String message) {
                 try {
                     out.writeObject(info);
