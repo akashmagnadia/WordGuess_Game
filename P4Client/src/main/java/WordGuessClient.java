@@ -82,14 +82,14 @@ public class WordGuessClient extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("(Client) Word Guess!!!");
-		music();
+//		music(); //TODO:Uncomment
 		
 		sceneMap = new HashMap<String, Scene>();
 		sceneMap.put("clientStart", createClientGUIStartScreen());
 		sceneMap.put("clientGameplay", createClientGUIGameplay());
 		
 		/* Initial Scene Configuration */
-		primaryStage.setScene(sceneMap.get("clientGameplay"));
+		primaryStage.setScene(sceneMap.get("clientStart"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		
@@ -104,6 +104,13 @@ public class WordGuessClient extends Application {
 		exit.setOnAction(e->{
 			Platform.exit();
 			System.exit(0);
+		});
+
+		connect.setOnAction(e -> {
+			System.out.println("Connecting to server...");
+			connectToServer();
+			primaryStage.setScene(sceneMap.get("clientGameplay"));
+			primaryStage.show();
 		});
 		
 		/* Allow the program to fully close upon exiting, allows current port to be freed up */
@@ -128,9 +135,9 @@ public class WordGuessClient extends Application {
 		);
 
 		try {
-			clientConnection.socketClient= new Socket("127.0.0.1", 5555);
-			//TODO: UnComment this when IPInput and PortInput is setup at the end
-//			clientConnection.socketClient= new Socket(IPInput.getText(), Integer.parseInt(portInput.getText()));
+//			clientConnection.socketClient= new Socket("127.0.0.1", 5555);
+			//TODO: UnComment this when IPInput and PortInput is setup at the end --Done,
+			clientConnection.socketClient= new Socket(IPInput.getText(), Integer.parseInt(portInput.getText()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
