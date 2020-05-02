@@ -57,16 +57,21 @@ public class WordGuessServer extends Application {
 		primaryStage.setScene(sceneMap.get("serverStart"));
 		primaryStage.show();
 
-		connectTheServer();
+		/* Button actions */
+		powerOn.setOnAction(e-> {
+			System.out.println("Starting up Server...");
+			connectTheServer();
+
+			primaryStage.setScene(sceneMap.get("serverGameplay"));
+			primaryStage.show();
+		});
 	}
 
 	public void connectTheServer() {
 
 		try {
 			serverConnection = new Server(data -> Platform.runLater(()->
-			{
-				serverLog.getItems().add(String.valueOf(data));
-			})
+					serverLog.getItems().add(String.valueOf(data)))
 			);
 		} catch (IOException e) {
 			e.printStackTrace();

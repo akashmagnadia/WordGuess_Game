@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 
 public class Server {
 
-    int clientCount = 1;
+    int clientCount = 0;
     ArrayList<TheServer.ClientThread> clients = new ArrayList<TheServer.ClientThread>();
     TheServer server;
     private Consumer<Serializable> callBack;
