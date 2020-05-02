@@ -47,7 +47,11 @@ public class GameInfo {
     int guessLeft = 6;
     Boolean[] selectedLetter = new Boolean[26]; //26 for 26 letters
 
+    //this is dynamic variable and will keep changing
     int indexOfLetter = -2;
+
+    //when the letter is guessed correctly decrement this number and when this number is at zero then word is solved
+    String workingWord = null;
 }
 
 //    // Creating array of string length
