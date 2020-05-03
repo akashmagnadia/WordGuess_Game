@@ -133,6 +133,9 @@ public class Server {
     }
 
     private void pickWord(GameInfo receivedInfo) {
+
+        receivedInfo.gameInProgress = true;
+
         int randomNum = (int)(Math.random() * 10 + 1);
         String word = "";
 
@@ -170,6 +173,51 @@ public class Server {
         return true;
     }
 
+    private void updateGameStatus(GameInfo clientInfo) {
+        // if player runs out of guesses for that category, reduce number of max solvable words by 1
+        if (clientInfo.guessLeft == 0) {
+            switch (clientInfo.currentCategory) {
+                case animal:
+                    clientInfo.guessableWordsLeftInAnimalCategory--;
+                    break;
+                case food:
+                    clientInfo.guessableWordsLeftInFoodCategory--;
+                    break;
+                case state:
+                    clientInfo.guessableWordsLeftInStateCategory--;
+                    break;
+            }
+        }
+
+        // player looses if either category's max solvable words is 0
+        if (clientInfo.guessableWordsLeftInAnimalCategory == 0 ||
+            clientInfo.guessableWordsLeftInFoodCategory== 0 ||
+            clientInfo.guessableWordsLeftInStateCategory == 0) {
+
+            clientInfo.gameLost = true;
+        }
+
+        // player wins round when working word is an empty string
+        if (clientInfo.workingWord.equals("")) {
+            switch (clientInfo.currentCategory) {
+                case animal:
+                    clientInfo.solvedAnimalCategory = true;
+                    break;
+                case food:
+                    clientInfo.solvedFoodCategory = true;
+                    break;
+                case state:
+                    clientInfo.solvedStateCategory = true;
+                    break;
+            }
+        }
+
+        // player wins if all categories are solved
+        if (clientInfo.solvedAnimalCategory && clientInfo.solvedFoodCategory && clientInfo.solvedStateCategory) {
+            clientInfo.gameWon = true;
+        }
+    }
+
     private GameInfo performLogic(GameInfo clientInfo) {
 
         // pick a word if it doesn't exist (from the selected category of course)
@@ -183,6 +231,10 @@ public class Server {
                 if (!isValidGuessChecker(clientInfo)) {
                     break;
                 }
+            }
+
+            if (clientInfo.gameInProgress) {
+                updateGameStatus(clientInfo);
             }
 
         } // end else

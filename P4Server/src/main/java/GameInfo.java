@@ -16,8 +16,10 @@ public class GameInfo implements Serializable {
 
     Boolean gameWon = false;
     Boolean gameLost = false;
-    Boolean roundLost = false;
-    Boolean roundWon = false;
+    Boolean gameInProgress = false;
+    Boolean solvedAnimalCategory = false;
+    Boolean solvedFoodCategory = false;
+    Boolean solvedStateCategory = false;
 
     int guessLeft = 6;
 
