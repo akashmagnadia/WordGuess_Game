@@ -35,7 +35,7 @@ public class Server {
                 System.out.println("Server is waiting for a client!");
                 callBack.accept("Server is waiting for a client!");
 
-                while(true) {
+                while (true) {
 
                     ClientThread c = new ClientThread(mysocket.accept(), clientCount);
                     callBack.accept("client has connected to server: " + "client #" + clientCount);
@@ -72,16 +72,13 @@ public class Server {
 
             //TODO: Needs rework for play again or quit button
             public void cleanClientsInfo() {
-                for(int i = 0; i < clients.size(); i++) {
-                    ClientThread thread = clients.get(i);
-
+                for (ClientThread thread : clients) {
                     GameInfo infoToSend = new GameInfo();
                     infoToSend.clientNumber = thread.clientInfo.clientNumber;
 
                     try {
                         thread.out.writeObject(infoToSend);
-                    }
-                    catch (Exception ignored) {
+                    } catch (Exception ignored) {
                     }
                 }
             }
@@ -107,17 +104,16 @@ public class Server {
                         ClientThread tempThread = clients.get(receivedInfo.clientNumber - 1);
 
                         //after performing the logic
-//                        tempThread.clientInfo = performLogic(receivedInfo);
+                        tempThread.clientInfo = performLogic(receivedInfo);
 
                         callBack.accept("Received something from Player " + receivedInfo.clientNumber);
 
                         //return logic performed info to send it back to client
                         out.writeUnshared(tempThread.clientInfo); //test with writeUnshared
-//                        out.writeObject(receivedInfo);
-                        listenForNewClientCommunication();
+                        out.writeObject(receivedInfo);
                     }
                     catch(Exception e) {
-                        callBack.accept("OOOOPPs...Something wrong with the socket from client: " + clientCount + "....closing down!");
+                        callBack.accept("OOOOPPs...Something wrong with the socket from client: " + (clientCount -1 )+ "....closing down!");
                         clients.remove(this);
                         break;
                     }
@@ -168,34 +164,30 @@ public class Server {
             return false;
         }
 
-        receivedInfo.indexOfLetter = index;
+        receivedInfo.letterIndices[index] = true;
+        receivedInfo.workingWord = receivedInfo.workingWord.replaceFirst(letter, "");
 
         return true;
     }
 
-    private void listenForNewClientCommunication() {
+    private GameInfo performLogic(GameInfo clientInfo) {
 
-        if (clientCount > 1) {
-            System.out.println("ClientCount: " + clientCount);
+        // pick a word if it doesn't exist (from the selected category of course)
+        if (clientInfo.word.equals("")) {
+            pickWord(clientInfo);
+            System.out.println("Picking word for client: " + clientInfo.clientNumber);
+        } // check letter guesses
+        else {
 
-            for (Server.TheServer.ClientThread clientThread : clients) {
-                GameInfo clientInfo = clientThread.clientInfo;
-                // pick a word if it doesn't exist (from the selected category of course)
-                if (clientInfo.word.equals("")) {
-                    pickWord(clientInfo);
-                    System.out.println("Picking word for client: " + clientInfo.clientNumber);
-                } // check letter guesses
-                else {
+            while (true) {
+                if (!isValidGuessChecker(clientInfo)) {
+                    break;
+                }
+            }
 
-                    int count = 0;
-                    while (isValidGuessChecker(clientInfo)) {
-                        clientThread.send(clientInfo, "Processing occurrence " + count + "of " + clientInfo.letter + " in word...");
-                    }
-                    // removing all copies of the same processed letter
-                    clientInfo.workingWord = clientInfo.workingWord.replace(clientInfo.letter, "");
+        } // end else
 
-                } // end else
-            } // end of for loop
-        } // end of if
+        return clientInfo;
+
     } // end of function
 }

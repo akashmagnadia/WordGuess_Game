@@ -14,7 +14,7 @@ public class Client extends Thread{
 
     boolean clientNumberCaptured; //used to get the client number
 
-    private Consumer<Serializable> callBack;
+    private final Consumer<Serializable> callBack;
     
 	int port;
 	String ip;

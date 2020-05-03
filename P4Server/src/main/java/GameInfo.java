@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 
 enum Categories {
     animal, food, state
@@ -21,7 +22,7 @@ public class GameInfo implements Serializable {
     int guessLeft = 6;
 
     //this is dynamic variable and will keep changing
-    int indexOfLetter = -2;
+    Boolean[] letterIndices = {false, false, false, false, false, false, false, false, false, false};
     String letter = "";
     String word = "";
 
