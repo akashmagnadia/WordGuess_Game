@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class GameInfo implements Serializable {
+public class ServerSideGameInfo implements Serializable {
     int clientNumber = -1;
     String animalsCategory = "Animals";
     String foodCategory = "Food";

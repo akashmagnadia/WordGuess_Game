@@ -58,13 +58,18 @@ public class Server {
             Socket connection;
             ObjectInputStream in;
             ObjectOutputStream out;
-            GameInfo clientInfo;
+
+            ServerSideGameInfo serverSideClientInfo;
+            ClientSideGameInfo clientSideClientInfo;
 
             ClientThread(Socket socket, int clientCount) throws IOException {
                 this.connection = socket;
 
-                this.clientInfo = new GameInfo();
-                this.clientInfo.clientNumber = clientCount;
+                this.serverSideClientInfo = new ServerSideGameInfo();
+                this.clientSideClientInfo = new ClientSideGameInfo();
+
+                this.serverSideClientInfo.clientNumber = clientCount;
+                this.clientSideClientInfo.clientNumber = clientCount;
             }
 
             //TODO: Needs rework for play again or quit button
@@ -72,8 +77,8 @@ public class Server {
                 for(int i = 0; i < clients.size(); i++) {
                     ClientThread thread = clients.get(i);
 
-                    GameInfo infoToSend = new GameInfo();
-                    infoToSend.clientNumber = thread.clientInfo.clientNumber;
+                    ServerSideGameInfo infoToSend = new ServerSideGameInfo();
+                    infoToSend.clientNumber = thread.serverSideClientInfo.clientNumber;
 
                     try {
                         thread.out.writeObject(infoToSend);
@@ -89,7 +94,7 @@ public class Server {
                     out = new ObjectOutputStream(connection.getOutputStream());
                     connection.setTcpNoDelay(true);
 
-                    out.writeUnshared(clientInfo); //test
+                    out.writeUnshared(clientSideClientInfo); //test
 //                    out.writeObject(clientInfo);
                 }
                 catch(Exception e) {
@@ -98,18 +103,25 @@ public class Server {
 
                 while(true) {
                     try {
-                        GameInfo receivedInfo = (GameInfo) in.readObject();
+                        ClientSideGameInfo receivedInfo = (ClientSideGameInfo) in.readObject();
 
                         //update player info in client thread array
                         ClientThread tempThread = clients.get(receivedInfo.clientNumber - 1);
+                        tempThread.clientSideClientInfo = receivedInfo;
+
+                        //transfer client side info to server side and send it off for logic
+                        //transferClientToServerGameInfo() returns server side converted gameInfo
 
                         //after performing the logic
-                        tempThread.clientInfo = updateIndexOfLetter(receivedInfo);
+                        tempThread.serverSideClientInfo = updateIndexOfLetter(transferClientToServerGameInfo(tempThread.serverSideClientInfo, tempThread.clientSideClientInfo));
+
+                        //returns client side converted gameInfo and sends it back to the client
+                        tempThread.clientSideClientInfo = transferServerToClientGameInfo(tempThread.serverSideClientInfo, tempThread.clientSideClientInfo);
 
                         callBack.accept("Received something from Player " + receivedInfo.clientNumber);
 
                         //return logic performed info to send it back to client
-                        out.writeUnshared(tempThread.clientInfo); //test with writeUnshared
+                        out.writeUnshared(tempThread.clientSideClientInfo); //test with writeUnshared
 //                        out.writeObject(receivedInfo);
                     }
                     catch(Exception e) {
@@ -120,7 +132,7 @@ public class Server {
                 }
             } //end of run
 
-            public void send(GameInfo info, String message) {
+            public void send(ServerSideGameInfo info, String message) {
                 try {
                     out.writeObject(info);
                     callBack.accept(message);
@@ -130,10 +142,10 @@ public class Server {
                 }
             }
 
-            public GameInfo updateIndexOfLetter(GameInfo receivedInfo) {
+            public ServerSideGameInfo updateIndexOfLetter(ServerSideGameInfo receivedInfo) {
                 //run this function when letter is clicked, which will update indexOfLetter and return it
 
-                GameInfo toReturnInfo = receivedInfo;
+                ServerSideGameInfo toReturnInfo = receivedInfo;
                 if (receivedInfo.playingAnimalsCategory) {
                     toReturnInfo = checkLetterClicked("Animals", receivedInfo);
 
@@ -194,7 +206,7 @@ public class Server {
                 //otherwise letter found at that index which is stored in indexOfLetter
             }
 
-            public GameInfo validGuessChecker(String word, String letter, GameInfo receivedInfo) {
+            public ServerSideGameInfo validGuessChecker(String word, String letter, ServerSideGameInfo receivedInfo) {
                 int index = word.toLowerCase().indexOf(letter);
                 if (index == -1) {
                     receivedInfo.guessLeft--;
@@ -212,7 +224,7 @@ public class Server {
                 return receivedInfo;
             }
 
-            public GameInfo checkLetterClickedHelper(String category, String letter, GameInfo receivedInfo) {
+            public ServerSideGameInfo checkLetterClickedHelper(String category, String letter, ServerSideGameInfo receivedInfo) {
                 switch (category) {
                     case "Animals":
                         if (!receivedInfo.animalsCategory_WordOneSolved) {
@@ -254,7 +266,7 @@ public class Server {
                 return receivedInfo;
             }
 
-            public GameInfo checkLetterClicked(String category, GameInfo receivedInfo) {
+            public ServerSideGameInfo checkLetterClicked(String category, ServerSideGameInfo receivedInfo) {
                 if (receivedInfo.selectedLetter.equals("a")) {
                     return checkLetterClickedHelper(category, "a", receivedInfo);
                 } else if (receivedInfo.selectedLetter.equals("b")) {
@@ -311,6 +323,61 @@ public class Server {
                     System.out.println("In check letter Clicked: No letter is clicked.");
                     return receivedInfo;
                 }
+            }
+
+            public ServerSideGameInfo transferClientToServerGameInfo(ServerSideGameInfo serverSideGameInfo, ClientSideGameInfo clientSideGameInfo) {
+                //returns server side converted gameInfo
+                serverSideGameInfo.selectedLetter = clientSideGameInfo.selectedLetter;
+
+                serverSideGameInfo.playingAnimalsCategory = clientSideGameInfo.playingAnimalsCategory;
+                serverSideGameInfo.animalsCategorySolved = clientSideGameInfo.animalsCategorySolved;
+                serverSideGameInfo.animalsCategory_WordOneSolved = clientSideGameInfo.animalsCategory_WordOneSolved;
+                serverSideGameInfo.animalsCategory_WordTwoSolved = clientSideGameInfo.animalsCategory_WordTwoSolved;
+                serverSideGameInfo.animalsCategory_WordThreeSolved = clientSideGameInfo.animalsCategory_WordThreeSolved;
+
+                serverSideGameInfo.playingFoodCategory = clientSideGameInfo.playingFoodCategory;
+                serverSideGameInfo.foodCategorySolved = clientSideGameInfo.foodCategorySolved;
+                serverSideGameInfo.foodCategory_WordOneSolved = clientSideGameInfo.foodCategory_WordOneSolved;
+                serverSideGameInfo.foodCategory_WordTwoSolved = clientSideGameInfo.foodCategory_WordTwoSolved;
+                serverSideGameInfo.foodCategory_WordThreeSolved = clientSideGameInfo.foodCategory_WordThreeSolved;
+
+                serverSideGameInfo.playingStatesCategory = clientSideGameInfo.playingStatesCategory;
+                serverSideGameInfo.statesCategorySolved = clientSideGameInfo.statesCategorySolved;
+                serverSideGameInfo.statesCategory_WordOneSolved = clientSideGameInfo.statesCategory_WordOneSolved;
+                serverSideGameInfo.statesCategory_WordTwoSolved = clientSideGameInfo.statesCategory_WordTwoSolved;
+                serverSideGameInfo.statesCategory_WordThreeSolved = clientSideGameInfo.statesCategory_WordThreeSolved;
+
+                serverSideGameInfo.guessLeft = clientSideGameInfo.guessLeft;
+
+                return serverSideGameInfo;
+            }
+
+            public ClientSideGameInfo transferServerToClientGameInfo(ServerSideGameInfo serverSideGameInfo, ClientSideGameInfo clientSideGameInfo) {
+                //returns client side converted gameInfo
+
+                clientSideGameInfo.indexOfLetter = serverSideGameInfo.indexOfLetter;
+
+                clientSideGameInfo.playingAnimalsCategory = serverSideGameInfo.playingAnimalsCategory;
+                clientSideGameInfo.animalsCategorySolved = serverSideGameInfo.animalsCategorySolved;
+                clientSideGameInfo.animalsCategory_WordOneSolved = serverSideGameInfo.animalsCategory_WordOneSolved;
+                clientSideGameInfo.animalsCategory_WordTwoSolved = serverSideGameInfo.animalsCategory_WordTwoSolved;
+                clientSideGameInfo.animalsCategory_WordThreeSolved = serverSideGameInfo.animalsCategory_WordThreeSolved;
+
+                clientSideGameInfo.playingFoodCategory = serverSideGameInfo.playingFoodCategory;
+                clientSideGameInfo.foodCategorySolved = serverSideGameInfo.foodCategorySolved;
+                clientSideGameInfo.foodCategory_WordOneSolved = serverSideGameInfo.foodCategory_WordOneSolved;
+                clientSideGameInfo.foodCategory_WordTwoSolved = serverSideGameInfo.foodCategory_WordTwoSolved;
+                clientSideGameInfo.foodCategory_WordThreeSolved = serverSideGameInfo.foodCategory_WordThreeSolved;
+
+                clientSideGameInfo.playingStatesCategory = serverSideGameInfo.playingStatesCategory;
+                clientSideGameInfo.statesCategorySolved = serverSideGameInfo.statesCategorySolved;
+                clientSideGameInfo.statesCategory_WordOneSolved = serverSideGameInfo.statesCategory_WordOneSolved;
+                clientSideGameInfo.statesCategory_WordTwoSolved = serverSideGameInfo.statesCategory_WordTwoSolved;
+                clientSideGameInfo.statesCategory_WordThreeSolved = serverSideGameInfo.statesCategory_WordThreeSolved;
+
+                clientSideGameInfo.guessLeft = serverSideGameInfo.guessLeft;
+
+                return clientSideGameInfo;
             }
         } //end of client thread
     }

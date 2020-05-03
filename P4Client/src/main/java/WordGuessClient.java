@@ -355,37 +355,40 @@ public class WordGuessClient extends Application {
 	public void listenFor() {
 		listenForCategory();
 		listenForLetter();
-		updateLetterBox(); //update UI every 1 seconds
 	}
 
 	public void updateLetterBox() {
+		//update UI 2 seconds after function is called
+
 		Timer t = new Timer();
 		t.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				if (clientConnection.myPlayerInfo.indexOfLetter == 0) {
-					updateLetterBoxHelper(firstBox);
-				} else if (clientConnection.myPlayerInfo.indexOfLetter == 1) {
-					updateLetterBoxHelper(secondBox);
-				} else if (clientConnection.myPlayerInfo.indexOfLetter == 2) {
-					updateLetterBoxHelper(thirdBox);
-				} else if (clientConnection.myPlayerInfo.indexOfLetter == 3) {
-					updateLetterBoxHelper(fourthBox);
-				} else if (clientConnection.myPlayerInfo.indexOfLetter == 4) {
-					updateLetterBoxHelper(fifthBox);
-				} else if (clientConnection.myPlayerInfo.indexOfLetter == 5) {
-					updateLetterBoxHelper(sixthBox);
-				} else if (clientConnection.myPlayerInfo.indexOfLetter == 6) {
-					updateLetterBoxHelper(seventhBox);
-				} else if (clientConnection.myPlayerInfo.indexOfLetter == 7) {
-					updateLetterBoxHelper(eighthBox);
-				} else if (clientConnection.myPlayerInfo.indexOfLetter == 8) {
-					updateLetterBoxHelper(ninthBox);
-				} else if (clientConnection.myPlayerInfo.indexOfLetter == 9) {
-					updateLetterBoxHelper(tenthBox);
+				if (clientConnection != null) {
+					if (clientConnection.myPlayerInfo.indexOfLetter == 0) {
+						updateLetterBoxHelper(firstBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 1) {
+						updateLetterBoxHelper(secondBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 2) {
+						updateLetterBoxHelper(thirdBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 3) {
+						updateLetterBoxHelper(fourthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 4) {
+						updateLetterBoxHelper(fifthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 5) {
+						updateLetterBoxHelper(sixthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 6) {
+						updateLetterBoxHelper(seventhBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 7) {
+						updateLetterBoxHelper(eighthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 8) {
+						updateLetterBoxHelper(ninthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 9) {
+						updateLetterBoxHelper(tenthBox);
+					}
 				}
 			}
-		}, 0, 1000);
+		}, 2000, 0);
 	}
 
 	public void updateLetterBoxHelper(ImageView boxToModify) {
