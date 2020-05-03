@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.function.Consumer;
 
 public class Client extends Thread{
-    GameInfo myPlayerInfo;
+    ClientSideGameInfo myPlayerInfo;
 
     Socket socketClient;
     ObjectOutputStream out;
@@ -21,7 +21,7 @@ public class Client extends Thread{
 	
     Client(Consumer<Serializable> call, int portNum, String ipAddress){
         callBack = call;
-        myPlayerInfo = new GameInfo();
+        myPlayerInfo = new ClientSideGameInfo();
 		port = portNum;
 		ip = ipAddress;
         clientNumberCaptured = false;
@@ -39,7 +39,7 @@ public class Client extends Thread{
 
         while (true) {
             try {
-                GameInfo receivedInfo = (GameInfo) in.readObject();
+                ClientSideGameInfo receivedInfo = (ClientSideGameInfo) in.readObject();
 
                 //since when the client is made it is assigned a client number
                 if (!clientNumberCaptured) {
@@ -56,7 +56,7 @@ public class Client extends Thread{
         }
     }
 
-    public void send(GameInfo info, String message) {
+    public void send(ClientSideGameInfo info, String message) {
         try {
             out.writeObject(info);
             callBack.accept(message);

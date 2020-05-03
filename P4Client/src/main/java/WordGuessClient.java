@@ -66,8 +66,7 @@ public class WordGuessClient extends Application {
 	
 	MenuButton letterChoices;
 	MenuItem letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ;
-	MenuItem[] letterList;
-
+	
 	Image defaultGreenBox = new Image("defaultLetterScreen.png");
 	Image whiteBox = new Image("whiteSpace.png");
 	ImageView firstBox, secondBox, thirdBox, fourthBox, fifthBox, sixthBox, seventhBox, eighthBox, ninthBox, tenthBox;
@@ -127,7 +126,6 @@ public class WordGuessClient extends Application {
 		});
 
 		listenForCategory();
-		listenForLetter();
 	}
 	
 
@@ -294,7 +292,7 @@ public class WordGuessClient extends Application {
 		
 		categories.setText("Pick a category");
 		categories.getItems().addAll(animals,food,states);
-		categories.setPrefSize(120, 40);
+		categories.setPrefSize(215, 40);
 		categories.setStyle("-fx-background-color: aqua;");
 		categories.setLayoutX(170);
 		categories.setLayoutY(550);
@@ -328,39 +326,36 @@ public class WordGuessClient extends Application {
 		letX = new MenuItem("X");
 		letY = new MenuItem("Y");
 		letZ = new MenuItem("Z");
-
-		letterList = new MenuItem[]{letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,
-									letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ};
-
+		
 		letterChoices.setText("Guess a letter!");
-		letterChoices.getItems().addAll(letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,
-										letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ);
-		letterChoices.setPrefSize(120, 40);
+		letterChoices.getItems().addAll(letA,letB,letC,letD,letE,letF,letG,letH,letI,
+				letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ);
+		letterChoices.setPrefSize(215, 40);
 		letterChoices.setStyle("-fx-background-color: coral;");
 		letterChoices.setTextFill(Color.WHITE);
-		letterChoices.setLayoutX(300);
+		letterChoices.setLayoutX(400);
 		letterChoices.setLayoutY(550);
 		/* Drop down menu for letter selection */
 		
 		/* Guesses Remaining Labels */
 		correctGuessesRemaining = new Label("Guesses Remaining:");
 		correctGuesses = new Label("6");
-		
+
 		correctGuessesRemaining.setFont(Font.font("Rockwell",20));
 		correctGuessesRemaining.setTextFill(Color.GOLD);
-		
+
 		correctGuesses.setStyle("-fx-border-color: gold;");
 		correctGuesses.setPrefSize(200, 100);
 		correctGuesses.setTextAlignment(TextAlignment.CENTER);
 		correctGuesses.setAlignment(Pos.CENTER);
 		correctGuesses.setFont(Font.font("Rockwell",64));
 		correctGuesses.setTextFill(Color.GOLD);
-		
+
 		VBox guessesBox = new VBox(5,correctGuessesRemaining,correctGuesses);
 		guessesBox.setLayoutX(430);
 		guessesBox.setLayoutY(530);
 		/* Guesses Remaining Labels */
-		
+
 		/* Client log */
 		info = FXCollections.observableArrayList();
 		clientLog = new ListView<String>(info);
@@ -372,7 +367,7 @@ public class WordGuessClient extends Application {
 		
 		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices,guessesBox,clientLog);
 		return new Scene(gameplay, 1000, 800);
-		
+
 	}
 	
 	public void music() {
@@ -383,30 +378,290 @@ public class WordGuessClient extends Application {
 		mediaPlayer.play();
 	}
 
-	public void listenForCategory() {
+	public void listenFor() {
+		listenForCategory();
+		listenForLetter();
+	}
 
-		animals.setOnAction(event -> {
-			clientConnection.myPlayerInfo.currentCategory = Categories.animal;
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Animals category");
+	public void updateLetterBox() {
+		//update UI 2 seconds after function is called
+
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				if (clientConnection != null) {
+					if (clientConnection.myPlayerInfo.indexOfLetter == 0) {
+						updateLetterBoxHelper(firstBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 1) {
+						updateLetterBoxHelper(secondBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 2) {
+						updateLetterBoxHelper(thirdBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 3) {
+						updateLetterBoxHelper(fourthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 4) {
+						updateLetterBoxHelper(fifthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 5) {
+						updateLetterBoxHelper(sixthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 6) {
+						updateLetterBoxHelper(seventhBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 7) {
+						updateLetterBoxHelper(eighthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 8) {
+						updateLetterBoxHelper(ninthBox);
+					} else if (clientConnection.myPlayerInfo.indexOfLetter == 9) {
+						updateLetterBoxHelper(tenthBox);
+					}
+				}
+			}
+		}, 2000, 1000);
+	}
+
+	public void updateLetterBoxHelper(ImageView boxToModify) {
+		if (clientConnection.myPlayerInfo.selectedLetter.equals("a")) {
+			boxToModify.setImage(new Image("letterA.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("b")) {
+			boxToModify.setImage(new Image("letterB.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("c")) {
+			boxToModify.setImage(new Image("letterC.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("d")) {
+			boxToModify.setImage(new Image("letterD.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("e")) {
+			boxToModify.setImage(new Image("letterE.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("f")) {
+			boxToModify.setImage(new Image("letterF.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("g")) {
+			boxToModify.setImage(new Image("letterG.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("h")) {
+			boxToModify.setImage(new Image("letterH.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("i")) {
+			boxToModify.setImage(new Image("letterI.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("j")) {
+			boxToModify.setImage(new Image("letterJ.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("k")) {
+			boxToModify.setImage(new Image("letterK.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("l")) {
+			boxToModify.setImage(new Image("letterL.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("m")) {
+			boxToModify.setImage(new Image("letterM.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("n")) {
+			boxToModify.setImage(new Image("letterN.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("o")) {
+			boxToModify.setImage(new Image("letterO.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("p")) {
+			boxToModify.setImage(new Image("letterP.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("q")) {
+			boxToModify.setImage(new Image("letterQ.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("r")) {
+			boxToModify.setImage(new Image("letterR.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("s")) {
+			boxToModify.setImage(new Image("letterS.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("t")) {
+			boxToModify.setImage(new Image("letterT.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("u")) {
+			boxToModify.setImage(new Image("letterU.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("v")) {
+			boxToModify.setImage(new Image("letterV.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("w")) {
+			boxToModify.setImage(new Image("letterW.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("x")) {
+			boxToModify.setImage(new Image("letterX.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("y")) {
+			boxToModify.setImage(new Image("letterY.png"));
+		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("z")) {
+			boxToModify.setImage(new Image("letterZ.png"));
+		} else {
+			System.out.println("No letter is selected yet");
+		}
+	}
+
+	public void listenForCategory() {
+		states.setOnAction(event -> {
+			clientConnection.myPlayerInfo.playingStatesCategory = true;
+			clientConnection.myPlayerInfo.playingFoodCategory = false;
+			clientConnection.myPlayerInfo.playingAnimalsCategory = false;
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on States category");
+
+			categories.setDisable(true);
+			category.setText("States");
 		});
 
 		food.setOnAction(event -> {
-			clientConnection.myPlayerInfo.currentCategory = Categories.food;
+			clientConnection.myPlayerInfo.playingStatesCategory = false;
+			clientConnection.myPlayerInfo.playingFoodCategory = true;
+			clientConnection.myPlayerInfo.playingAnimalsCategory = false;
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Food category");
+
+			categories.setDisable(true);
+			category.setText("Food");
 		});
 
-		states.setOnAction(event -> {
-			clientConnection.myPlayerInfo.currentCategory = Categories.state;
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on States category");
+		animals.setOnAction(event -> {
+			clientConnection.myPlayerInfo.playingStatesCategory = false;
+			clientConnection.myPlayerInfo.playingFoodCategory = false;
+			clientConnection.myPlayerInfo.playingAnimalsCategory = true;
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Animals category");
+
+			categories.setDisable(true);
+			category.setText("Animals");
 		});
 	}
 
 	public void listenForLetter() {
-		for (MenuItem letter: letterList) {
-			letter.setOnAction(event -> {
-				clientConnection.myPlayerInfo.letter = letter.getText();
-				clientConnection.send(clientConnection.myPlayerInfo, "Clicked on the letter '" + letter.getText() + "'");
-			});
-		}
+		letA.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "a";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter A");
+			updateLetterBox();
+		});
+
+		letB.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "b";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter B");
+			updateLetterBox();
+		});
+
+		letC.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "c";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter C");
+			updateLetterBox();
+		});
+
+		letD.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "d";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter D");
+			updateLetterBox();
+		});
+
+		letE.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "e";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter E");
+			updateLetterBox();
+		});
+
+		letF.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "f";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter F");
+			updateLetterBox();
+		});
+
+		letG.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "g";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter G");
+			updateLetterBox();
+		});
+
+		letH.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "h";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter H");
+			updateLetterBox();
+		});
+
+		letI.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "i";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter I");
+			updateLetterBox();
+		});
+
+		letJ.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "j";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter J");
+			updateLetterBox();
+		});
+
+		letK.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "k";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter K");
+			updateLetterBox();
+		});
+
+		letL.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "l";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter L");
+			updateLetterBox();
+		});
+
+		letM.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "m";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter M");
+			updateLetterBox();
+		});
+
+		letN.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "n";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter N");
+			updateLetterBox();
+		});
+
+		letO.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "o";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter O");
+			updateLetterBox();
+		});
+
+		letP.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "p";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter P");
+			updateLetterBox();
+		});
+
+		letQ.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "q";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter Q");
+			updateLetterBox();
+		});
+
+		letR.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "r";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter R");
+			updateLetterBox();
+		});
+
+		letS.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "s";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter S");
+			updateLetterBox();
+		});
+
+		letT.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "t";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter T");
+			updateLetterBox();
+		});
+
+		letU.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "u";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter U");
+			updateLetterBox();
+		});
+
+		letV.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "v";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter V");
+			updateLetterBox();
+		});
+
+		letW.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "w";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter W");
+			updateLetterBox();
+		});
+
+		letX.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "x";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter X");
+			updateLetterBox();
+		});
+
+		letY.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "y";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter Y");
+			updateLetterBox();
+		});
+
+		letZ.setOnAction(event -> {
+			clientConnection.myPlayerInfo.selectedLetter = "z";
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter Z");
+			updateLetterBox();
+		});
 	}
 }

@@ -1,17 +1,17 @@
 import java.io.Serializable;
 
-public class GameInfo implements Serializable {
+public class ServerSideGameInfo implements Serializable {
     int clientNumber = -1;
     String animalsCategory = "Animals";
     String foodCategory = "Food";
     String statesCategory = "States";
 
     //as the user guesses the word, the char array will be filled with the letters
-    String animalsCategory_WordOne = "wordOne";
+    String animalsCategory_WordOne = "Tiger";
     char[] animalsCategory_WordOneArray = new char[animalsCategory_WordOne.length()];
-    String animalsCategory_WordTwo = "wordTwo";
+    String animalsCategory_WordTwo = "Lion";
     char[] animalsCategory_WordTwoArray = new char[animalsCategory_WordTwo.length()];
-    String animalsCategory_WordThree = "wordThree";
+    String animalsCategory_WordThree = "Cheetah";
     char[] animalsCategory_WordThreeArray = new char[animalsCategory_WordThree.length()];
 
     String foodCategory_WordOne = "wordOne";
@@ -47,11 +47,10 @@ public class GameInfo implements Serializable {
     Boolean statesCategory_WordThreeSolved = false;
 
     int guessLeft = 6;
-    Boolean[] selectedLetter = new Boolean[26]; //26 for 26 letters
 
     //this is dynamic variable and will keep changing
     int indexOfLetter = -2;
-    String letter = "";
+    String selectedLetter = "";
 
     //when the letter is guessed correctly decrement this number and when this number is at zero then word is solved
     String workingWord = null;

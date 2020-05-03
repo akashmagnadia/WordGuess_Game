@@ -12,11 +12,8 @@ public class Server {
     int clientCount = 1;
     ArrayList<TheServer.ClientThread> clients = new ArrayList<TheServer.ClientThread>();
     TheServer server;
-    private final Consumer<Serializable> callBack;
+    private Consumer<Serializable> callBack;
 
-    private final String[] animalWords = {"Lion", "Dog", "Cat", "Tiger", "Wolf", "Elephant", "Anaconda", "Python", "Jaguar", "Bear"};
-    private final String[] foodWords = {"Tacos", "Pizza", "Hamburger", "Fries", "Salad", "Soup", "Kiwi", "Strawberry", "Mango", "Pecan"};
-    private final String[] stateWords = {"Alaska", "Arizona", "Illinois", "Hawaii", "Florida", "Colorado", "Delaware", "Utah", "Nevada", "California"};
 
     Server(Consumer<Serializable> call) throws IOException {
         callBack = call;
@@ -35,7 +32,7 @@ public class Server {
                 System.out.println("Server is waiting for a client!");
                 callBack.accept("Server is waiting for a client!");
 
-                while (true) {
+                while(true) {
 
                     ClientThread c = new ClientThread(mysocket.accept(), clientCount);
                     callBack.accept("client has connected to server: " + "client #" + clientCount);
@@ -72,13 +69,16 @@ public class Server {
 
             //TODO: Needs rework for play again or quit button
             public void cleanClientsInfo() {
-                for (ClientThread thread : clients) {
+                for(int i = 0; i < clients.size(); i++) {
+                    ClientThread thread = clients.get(i);
+
                     GameInfo infoToSend = new GameInfo();
                     infoToSend.clientNumber = thread.clientInfo.clientNumber;
 
                     try {
                         thread.out.writeObject(infoToSend);
-                    } catch (Exception ignored) {
+                    }
+                    catch (Exception ignored) {
                     }
                 }
             }
@@ -104,16 +104,16 @@ public class Server {
                         ClientThread tempThread = clients.get(receivedInfo.clientNumber - 1);
 
                         //after performing the logic
-                        tempThread.clientInfo = performLogic(receivedInfo);
+//                        tempThread.clientInfo = performLogic(receivedInfo);
 
                         callBack.accept("Received something from Player " + receivedInfo.clientNumber);
 
                         //return logic performed info to send it back to client
                         out.writeUnshared(tempThread.clientInfo); //test with writeUnshared
-                        out.writeObject(receivedInfo);
+//                        out.writeObject(receivedInfo);
                     }
                     catch(Exception e) {
-                        callBack.accept("OOOOPPs...Something wrong with the socket from client: " + (clientCount -1 )+ "....closing down!");
+                        callBack.accept("OOOOPPs...Something wrong with the socket from client: " + clientCount + "....closing down!");
                         clients.remove(this);
                         break;
                     }
@@ -131,115 +131,4 @@ public class Server {
             }
         } //end of client thread
     }
-
-    private void pickWord(GameInfo receivedInfo) {
-
-        receivedInfo.gameInProgress = true;
-
-        int randomNum = (int)(Math.random() * 10 + 1);
-        String word = "";
-
-        // TODO: prevent already picked words from being used again
-        switch (receivedInfo.currentCategory) {
-            case animal:
-                word = animalWords[randomNum];
-                break;
-            case food:
-                word = foodWords[randomNum];
-                break;
-            case state:
-                word = stateWords[randomNum];
-                break;
-        }
-
-        receivedInfo.word = word;
-        receivedInfo.workingWord = word;
-    }
-
-    private boolean isValidGuessChecker(GameInfo receivedInfo) {
-
-        String word = receivedInfo.word;
-        String letter = receivedInfo.letter;
-
-        int index = word.indexOf(letter);
-        if (index == -1) {
-            receivedInfo.guessLeft--;
-            return false;
-        }
-
-        receivedInfo.letterIndices[index] = true;
-        receivedInfo.workingWord = receivedInfo.workingWord.replaceFirst(letter, "");
-
-        return true;
-    }
-
-    private void updateGameStatus(GameInfo clientInfo) {
-        // if player runs out of guesses for that category, reduce number of max solvable words by 1
-        if (clientInfo.guessLeft == 0) {
-            switch (clientInfo.currentCategory) {
-                case animal:
-                    clientInfo.guessableWordsLeftInAnimalCategory--;
-                    break;
-                case food:
-                    clientInfo.guessableWordsLeftInFoodCategory--;
-                    break;
-                case state:
-                    clientInfo.guessableWordsLeftInStateCategory--;
-                    break;
-            }
-        }
-
-        // player looses if either category's max solvable words is 0
-        if (clientInfo.guessableWordsLeftInAnimalCategory == 0 ||
-            clientInfo.guessableWordsLeftInFoodCategory== 0 ||
-            clientInfo.guessableWordsLeftInStateCategory == 0) {
-
-            clientInfo.gameLost = true;
-        }
-
-        // player wins round when working word is an empty string
-        if (clientInfo.workingWord.equals("")) {
-            switch (clientInfo.currentCategory) {
-                case animal:
-                    clientInfo.solvedAnimalCategory = true;
-                    break;
-                case food:
-                    clientInfo.solvedFoodCategory = true;
-                    break;
-                case state:
-                    clientInfo.solvedStateCategory = true;
-                    break;
-            }
-        }
-
-        // player wins if all categories are solved
-        if (clientInfo.solvedAnimalCategory && clientInfo.solvedFoodCategory && clientInfo.solvedStateCategory) {
-            clientInfo.gameWon = true;
-        }
-    }
-
-    private GameInfo performLogic(GameInfo clientInfo) {
-
-        // pick a word if it doesn't exist (from the selected category of course)
-        if (clientInfo.word.equals("")) {
-            pickWord(clientInfo);
-            System.out.println("Picking word for client: " + clientInfo.clientNumber);
-        } // check letter guesses
-        else {
-
-            while (true) {
-                if (!isValidGuessChecker(clientInfo)) {
-                    break;
-                }
-            }
-
-            if (clientInfo.gameInProgress) {
-                updateGameStatus(clientInfo);
-            }
-
-        } // end else
-
-        return clientInfo;
-
-    } // end of function
 }
