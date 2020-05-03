@@ -294,7 +294,7 @@ public class WordGuessClient extends Application {
 		
 		categories.setText("Pick a category");
 		categories.getItems().addAll(animals,food,states);
-		categories.setPrefSize(215, 40);
+		categories.setPrefSize(120, 40);
 		categories.setStyle("-fx-background-color: aqua;");
 		categories.setLayoutX(170);
 		categories.setLayoutY(550);
@@ -335,12 +335,31 @@ public class WordGuessClient extends Application {
 		letterChoices.setText("Guess a letter!");
 		letterChoices.getItems().addAll(letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,
 										letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ);
-		letterChoices.setPrefSize(215, 40);
+		letterChoices.setPrefSize(120, 40);
 		letterChoices.setStyle("-fx-background-color: coral;");
 		letterChoices.setTextFill(Color.WHITE);
-		letterChoices.setLayoutX(400);
+		letterChoices.setLayoutX(300);
 		letterChoices.setLayoutY(550);
 		/* Drop down menu for letter selection */
+		
+		/* Guesses Remaining Labels */
+		correctGuessesRemaining = new Label("Guesses Remaining:");
+		correctGuesses = new Label("6");
+		
+		correctGuessesRemaining.setFont(Font.font("Rockwell",20));
+		correctGuessesRemaining.setTextFill(Color.GOLD);
+		
+		correctGuesses.setStyle("-fx-border-color: gold;");
+		correctGuesses.setPrefSize(200, 100);
+		correctGuesses.setTextAlignment(TextAlignment.CENTER);
+		correctGuesses.setAlignment(Pos.CENTER);
+		correctGuesses.setFont(Font.font("Rockwell",64));
+		correctGuesses.setTextFill(Color.GOLD);
+		
+		VBox guessesBox = new VBox(5,correctGuessesRemaining,correctGuesses);
+		guessesBox.setLayoutX(430);
+		guessesBox.setLayoutY(530);
+		/* Guesses Remaining Labels */
 		
 		/* Client log */
 		info = FXCollections.observableArrayList();
@@ -351,7 +370,7 @@ public class WordGuessClient extends Application {
 		clientLog.setLayoutY(540);
 		/* Client log */
 		
-		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices,clientLog);
+		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices,guessesBox,clientLog);
 		return new Scene(gameplay, 1000, 800);
 		
 	}
