@@ -92,6 +92,8 @@ public class WordGuessClient extends Application {
 		primaryStage.setScene(sceneMap.get("clientStart"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
+
+		clientLog = new ListView<String>();
 		
 		unmute.setOnAction(e->{
 			music();
