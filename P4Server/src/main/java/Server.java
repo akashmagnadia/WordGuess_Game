@@ -12,8 +12,11 @@ public class Server {
     int clientCount = 1;
     ArrayList<TheServer.ClientThread> clients = new ArrayList<TheServer.ClientThread>();
     TheServer server;
-    private Consumer<Serializable> callBack;
+    private final Consumer<Serializable> callBack;
 
+    private final String[] animalWords = {"Lion", "Dog", "Cat", "Tiger", "Wolf", "Elephant", "Anaconda", "Python", "Jaguar", "Bear"};
+    private final String[] foodWords = {"Tacos", "Pizza", "Hamburger", "Fries", "Salad", "Soup", "Kiwi", "Strawberry", "Mango", "Pecan"};
+    private final String[] stateWords = {"Alaska", "Arizona", "Illinois", "Hawaii", "Florida", "Colorado", "Delaware", "Utah", "Nevada", "California"};
 
     Server(Consumer<Serializable> call) throws IOException {
         callBack = call;
@@ -111,6 +114,7 @@ public class Server {
                         //return logic performed info to send it back to client
                         out.writeUnshared(tempThread.clientInfo); //test with writeUnshared
 //                        out.writeObject(receivedInfo);
+                        listenForNewClientCommunication();
                     }
                     catch(Exception e) {
                         callBack.accept("OOOOPPs...Something wrong with the socket from client: " + clientCount + "....closing down!");
@@ -131,4 +135,67 @@ public class Server {
             }
         } //end of client thread
     }
+
+    private void pickWord(GameInfo receivedInfo) {
+        int randomNum = (int)(Math.random() * 10 + 1);
+        String word = "";
+
+        // TODO: prevent already picked words from being used again
+        switch (receivedInfo.currentCategory) {
+            case animal:
+                word = animalWords[randomNum];
+                break;
+            case food:
+                word = foodWords[randomNum];
+                break;
+            case state:
+                word = stateWords[randomNum];
+                break;
+        }
+
+        receivedInfo.word = word;
+        receivedInfo.workingWord = word;
+    }
+
+    private boolean isValidGuessChecker(GameInfo receivedInfo) {
+
+        String word = receivedInfo.word;
+        String letter = receivedInfo.letter;
+
+        int index = word.indexOf(letter);
+        if (index == -1) {
+            receivedInfo.guessLeft--;
+            return false;
+        }
+
+        receivedInfo.indexOfLetter = index;
+
+        return true;
+    }
+
+    private void listenForNewClientCommunication() {
+
+        if (clientCount > 1) {
+            System.out.println("ClientCount: " + clientCount);
+
+            for (Server.TheServer.ClientThread clientThread : clients) {
+                GameInfo clientInfo = clientThread.clientInfo;
+                // pick a word if it doesn't exist (from the selected category of course)
+                if (clientInfo.word.equals("")) {
+                    pickWord(clientInfo);
+                    System.out.println("Picking word for client: " + clientInfo.clientNumber);
+                } // check letter guesses
+                else {
+
+                    int count = 0;
+                    while (isValidGuessChecker(clientInfo)) {
+                        clientThread.send(clientInfo, "Processing occurrence " + count + "of " + clientInfo.letter + " in word...");
+                    }
+                    // removing all copies of the same processed letter
+                    clientInfo.workingWord = clientInfo.workingWord.replace(clientInfo.letter, "");
+
+                } // end else
+            } // end of for loop
+        } // end of if
+    } // end of function
 }

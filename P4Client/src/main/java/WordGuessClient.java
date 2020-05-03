@@ -66,7 +66,8 @@ public class WordGuessClient extends Application {
 	
 	MenuButton letterChoices;
 	MenuItem letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ;
-	
+	MenuItem[] letterList;
+
 	Image defaultGreenBox = new Image("defaultLetterScreen.png");
 	Image whiteBox = new Image("whiteSpace.png");
 	ImageView firstBox, secondBox, thirdBox, fourthBox, fifthBox, sixthBox, seventhBox, eighthBox, ninthBox, tenthBox;
@@ -126,6 +127,7 @@ public class WordGuessClient extends Application {
 		});
 
 		listenForCategory();
+		listenForLetter();
 	}
 	
 
@@ -326,10 +328,13 @@ public class WordGuessClient extends Application {
 		letX = new MenuItem("X");
 		letY = new MenuItem("Y");
 		letZ = new MenuItem("Z");
-		
+
+		letterList = new MenuItem[]{letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,
+									letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ};
+
 		letterChoices.setText("Guess a letter!");
-		letterChoices.getItems().addAll(letA,letB,letC,letD,letE,letF,letG,letH,letI,
-				letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ);
+		letterChoices.getItems().addAll(letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,
+										letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ);
 		letterChoices.setPrefSize(215, 40);
 		letterChoices.setStyle("-fx-background-color: coral;");
 		letterChoices.setTextFill(Color.WHITE);
@@ -360,29 +365,29 @@ public class WordGuessClient extends Application {
 	}
 
 	public void listenForCategory() {
-		states.setOnAction(event -> {
-			clientConnection.myPlayerInfo.playingStatesCategory = true;
-			clientConnection.myPlayerInfo.playingFoodCategory = false;
-			clientConnection.myPlayerInfo.playingAnimalsCategory = false;
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on States category");
+
+		animals.setOnAction(event -> {
+			clientConnection.myPlayerInfo.currentCategory = Categories.animal;
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Animals category");
 		});
 
 		food.setOnAction(event -> {
-			clientConnection.myPlayerInfo.playingStatesCategory = false;
-			clientConnection.myPlayerInfo.playingFoodCategory = true;
-			clientConnection.myPlayerInfo.playingAnimalsCategory = false;
+			clientConnection.myPlayerInfo.currentCategory = Categories.food;
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Food category");
 		});
 
-		animals.setOnAction(event -> {
-			clientConnection.myPlayerInfo.playingStatesCategory = false;
-			clientConnection.myPlayerInfo.playingFoodCategory = false;
-			clientConnection.myPlayerInfo.playingAnimalsCategory = true;
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Animals category");
+		states.setOnAction(event -> {
+			clientConnection.myPlayerInfo.currentCategory = Categories.state;
+			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on States category");
 		});
 	}
 
 	public void listenForLetter() {
-
+		for (MenuItem letter: letterList) {
+			letter.setOnAction(event -> {
+				clientConnection.myPlayerInfo.letter = letter.getText();
+				clientConnection.send(clientConnection.myPlayerInfo, "Clicked on the letter '" + letter.getText() + "'");
+			});
+		}
 	}
 }

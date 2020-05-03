@@ -37,7 +37,7 @@ public class Client extends Thread{
         }
         catch(Exception ignored) {}
 
-        while(true) {
+        while (true) {
             try {
                 GameInfo receivedInfo = (GameInfo) in.readObject();
 

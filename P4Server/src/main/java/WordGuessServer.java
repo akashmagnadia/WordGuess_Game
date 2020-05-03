@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 
 //Look at GameInfo for all the variables that can be utilized to help make the UI
@@ -89,7 +90,7 @@ public class WordGuessServer extends Application {
 		}
 
 		serverConnection.server.port = 5555; //default
-		//TODO: After getting server port is figured out
+		//TODO: After getting server port is figured out --done
 //		serverConnection.server.port = Integer.parseInt(portSelect.getText());
 	}
 
@@ -189,186 +190,4 @@ public class WordGuessServer extends Application {
 		return new Scene(gameplay, 970, 700);
 	}
 
-	public GameInfo updateIndexOfLetter(GameInfo receivedInfo) {
-		//run this function when letter is clicked, which will update indexOfLetter and return it
-
-		GameInfo toReturnInfo = receivedInfo;
-		if (receivedInfo.playingAnimalsCategory) {
-			toReturnInfo = checkLetterClicked("Animals", receivedInfo);
-
-			//if the word is solved
-			if (toReturnInfo.workingWord.length() <= 0) {
-				if (!toReturnInfo.animalsCategory_WordOneSolved) {
-					toReturnInfo.animalsCategory_WordOneSolved = true;
-				} else if (!toReturnInfo.animalsCategory_WordTwoSolved) {
-					toReturnInfo.animalsCategory_WordTwoSolved = true;
-				} else if (!toReturnInfo.animalsCategory_WordThreeSolved) {
-					toReturnInfo.animalsCategory_WordThreeSolved = true;
-				} else {
-					System.out.println("In updateIndexOfLetter animal category: This shouldn't happen");
-				}
-			}
-
-		} else if (receivedInfo.playingFoodCategory) {
-			toReturnInfo = checkLetterClicked("Food", receivedInfo);
-
-			//if the word is solved
-			if (toReturnInfo.workingWord.length() <= 0) {
-				if (!toReturnInfo.foodCategory_WordOneSolved) {
-					toReturnInfo.foodCategory_WordOneSolved = true;
-				} else if (!toReturnInfo.foodCategory_WordTwoSolved) {
-					toReturnInfo.foodCategory_WordTwoSolved = true;
-				} else if (!toReturnInfo.foodCategory_WordThreeSolved) {
-					toReturnInfo.foodCategory_WordThreeSolved = true;
-				} else {
-					System.out.println("In updateIndexOfLetter food category: This shouldn't happen");
-				}
-			}
-
-		} else if (receivedInfo.playingStatesCategory) {
-			toReturnInfo = checkLetterClicked("States", receivedInfo);
-
-			//if the word is solved
-			if (toReturnInfo.workingWord.length() <= 0) {
-				if (!toReturnInfo.statesCategory_WordOneSolved) {
-					toReturnInfo.statesCategory_WordOneSolved = true;
-				} else if (!toReturnInfo.statesCategory_WordTwoSolved) {
-					toReturnInfo.statesCategory_WordTwoSolved = true;
-				} else if (!toReturnInfo.statesCategory_WordThreeSolved) {
-					toReturnInfo.statesCategory_WordThreeSolved = true;
-				} else {
-					System.out.println("In updateIndexOfLetter states category: This shouldn't happen");
-				}
-			}
-
-		} else {
-			System.out.println("This shouldn't happen");
-		}
-		return toReturnInfo;
-
-		//indexOfLetter will be changing,
-		//set to -2 to reset
-		//-2 means nothing has been changed
-		//-1 means index is not found
-		//otherwise letter found at that index which is stored in indexOfLetter
-	}
-
-	public GameInfo validGuessChecker(String word, String letter, GameInfo receivedInfo) {
-		int index = word.indexOf(letter);
-		if (index == -1) {
-			receivedInfo.guessLeft--;
-		}
-		receivedInfo.indexOfLetter = index;
-		receivedInfo.letter = letter;
-
-		if (receivedInfo.workingWord == null) {
-			receivedInfo.workingWord = word;
-		}
-
-		receivedInfo.workingWord = receivedInfo.workingWord.replace(letter, "");
-
-		//checks if working word is solved
-		return receivedInfo;
-	}
-
-	public GameInfo checkLetterClickedHelper(String category, String letter, GameInfo receivedInfo) {
-		switch (category) {
-			case "Animals":
-				if (!receivedInfo.animalsCategory_WordOneSolved) {
-					return validGuessChecker(receivedInfo.animalsCategory_WordOne, letter, receivedInfo);
-				} else if (!receivedInfo.animalsCategory_WordTwoSolved) {
-					return validGuessChecker(receivedInfo.animalsCategory_WordTwo, letter, receivedInfo);
-				} else if (!receivedInfo.animalsCategory_WordThreeSolved) {
-					return validGuessChecker(receivedInfo.animalsCategory_WordThree, letter, receivedInfo);
-				} else {
-					System.out.println("In Animals Category: This shouldn't happen");
-				}
-				break;
-			case "Food":
-				if (!receivedInfo.foodCategory_WordOneSolved) {
-					return validGuessChecker(receivedInfo.foodCategory_WordOne, letter, receivedInfo);
-				} else if (!receivedInfo.foodCategory_WordTwoSolved) {
-					return validGuessChecker(receivedInfo.foodCategory_WordTwo, letter, receivedInfo);
-				} else if (!receivedInfo.foodCategory_WordThreeSolved) {
-					return validGuessChecker(receivedInfo.foodCategory_WordThree, letter, receivedInfo);
-				} else {
-					System.out.println("In Food Category: This shouldn't happen");
-				}
-				break;
-			case "States":
-				if (!receivedInfo.statesCategory_WordOneSolved) {
-					return validGuessChecker(receivedInfo.statesCategory_WordOne, letter, receivedInfo);
-				} else if (!receivedInfo.statesCategory_WordTwoSolved) {
-					return validGuessChecker(receivedInfo.statesCategory_WordTwo, letter, receivedInfo);
-				} else if (!receivedInfo.statesCategory_WordThreeSolved) {
-					return validGuessChecker(receivedInfo.statesCategory_WordThree, letter, receivedInfo);
-				} else {
-					System.out.println("In States Category: This shouldn't happen");
-				}
-				break;
-			default:
-				System.out.println("In checking letter clicked: This shouldn't happen");
-				break;
-		}
-		return receivedInfo;
-	}
-
-	public GameInfo checkLetterClicked(String category, GameInfo receivedInfo) {
-		if (receivedInfo.selectedLetter[0]) {
-			return checkLetterClickedHelper(category, "a", receivedInfo);
-		} else if (receivedInfo.selectedLetter[1]) {
-			return checkLetterClickedHelper(category, "b", receivedInfo);
-		} else if (receivedInfo.selectedLetter[2]) {
-			return checkLetterClickedHelper(category, "c", receivedInfo);
-		} else if (receivedInfo.selectedLetter[3]) {
-			return checkLetterClickedHelper(category, "d", receivedInfo);
-		} else if (receivedInfo.selectedLetter[4]) {
-			return checkLetterClickedHelper(category, "e", receivedInfo);
-		} else if (receivedInfo.selectedLetter[5]) {
-			return checkLetterClickedHelper(category, "f", receivedInfo);
-		} else if (receivedInfo.selectedLetter[6]) {
-			return checkLetterClickedHelper(category, "g", receivedInfo);
-		} else if (receivedInfo.selectedLetter[7]) {
-			return checkLetterClickedHelper(category, "h", receivedInfo);
-		} else if (receivedInfo.selectedLetter[8]) {
-			return checkLetterClickedHelper(category, "i", receivedInfo);
-		} else if (receivedInfo.selectedLetter[9]) {
-			return checkLetterClickedHelper(category, "j", receivedInfo);
-		} else if (receivedInfo.selectedLetter[10]) {
-			return checkLetterClickedHelper(category, "k", receivedInfo);
-		} else if (receivedInfo.selectedLetter[11]) {
-			return checkLetterClickedHelper(category, "l", receivedInfo);
-		} else if (receivedInfo.selectedLetter[12]) {
-			return checkLetterClickedHelper(category, "m", receivedInfo);
-		} else if (receivedInfo.selectedLetter[13]) {
-			return checkLetterClickedHelper(category, "n", receivedInfo);
-		} else if (receivedInfo.selectedLetter[14]) {
-			return checkLetterClickedHelper(category, "o", receivedInfo);
-		} else if (receivedInfo.selectedLetter[15]) {
-			return checkLetterClickedHelper(category, "p", receivedInfo);
-		} else if (receivedInfo.selectedLetter[16]) {
-			return checkLetterClickedHelper(category, "q", receivedInfo);
-		} else if (receivedInfo.selectedLetter[17]) {
-			return checkLetterClickedHelper(category, "r", receivedInfo);
-		} else if (receivedInfo.selectedLetter[18]) {
-			return checkLetterClickedHelper(category, "s", receivedInfo);
-		} else if (receivedInfo.selectedLetter[19]) {
-			return checkLetterClickedHelper(category, "t", receivedInfo);
-		} else if (receivedInfo.selectedLetter[20]) {
-			return checkLetterClickedHelper(category, "u", receivedInfo);
-		} else if (receivedInfo.selectedLetter[21]) {
-			return checkLetterClickedHelper(category, "v", receivedInfo);
-		} else if (receivedInfo.selectedLetter[22]) {
-			return checkLetterClickedHelper(category, "w", receivedInfo);
-		} else if (receivedInfo.selectedLetter[23]) {
-			return checkLetterClickedHelper(category, "x", receivedInfo);
-		} else if (receivedInfo.selectedLetter[24]) {
-			return checkLetterClickedHelper(category, "y", receivedInfo);
-		} else if (receivedInfo.selectedLetter[25]) {
-			return checkLetterClickedHelper(category, "z", receivedInfo);
-		} else {
-			System.out.println("In check letter Clicked: This shouldn't happen");
-			return receivedInfo;
-		}
-	}
 }
