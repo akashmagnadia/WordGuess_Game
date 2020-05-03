@@ -49,7 +49,10 @@ import java.nio.file.Paths;
 public class WordGuessClient extends Application {
 
 	HashMap<String, Scene> sceneMap;
+	
 	ListView<String> clientLog;
+	ObservableList<String> info;
+	
 	Button connect;
 	TextField IPInput, portInput;
 	MenuItem exit, mute, unmute;
@@ -92,8 +95,6 @@ public class WordGuessClient extends Application {
 		primaryStage.setScene(sceneMap.get("clientStart"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
-
-		clientLog = new ListView<String>();
 		
 		unmute.setOnAction(e->{
 			music();
@@ -338,7 +339,16 @@ public class WordGuessClient extends Application {
 		letterChoices.setLayoutY(550);
 		/* Drop down menu for letter selection */
 		
-		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices);
+		/* Client log */
+		info = FXCollections.observableArrayList();
+		clientLog = new ListView<String>(info);
+		clientLog.setPrefSize(325, 120);
+		clientLog.setOpacity(0.8);
+		clientLog.setLayoutX(640);
+		clientLog.setLayoutY(540);
+		/* Client log */
+		
+		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices,clientLog);
 		return new Scene(gameplay, 1000, 800);
 		
 	}
