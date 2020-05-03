@@ -388,7 +388,7 @@ public class WordGuessClient extends Application {
 					}
 				}
 			}
-		}, 2000, 0);
+		}, 2000, 1000);
 	}
 
 	public void updateLetterBoxHelper(ImageView boxToModify) {
