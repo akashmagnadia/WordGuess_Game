@@ -131,17 +131,15 @@ public class WordGuessClient extends Application {
 
 
 	public void connectToServer() {
-		clientConnection = new Client(data -> Platform.runLater(()->
-		{
-			clientLog.getItems().add(String.valueOf(data));
-		})
-		);
-
 		try {
-//			clientConnection.socketClient= new Socket("127.0.0.1", 5555);
-			//TODO: UnComment this when IPInput and PortInput is setup at the end --Done,
-			clientConnection.socketClient= new Socket(IPInput.getText(), Integer.parseInt(portInput.getText()));
-		} catch (IOException e) {
+			port = Integer.parseInt(portInput.getText()); // convert string input to integer
+			ip = IPInput.getText(); // set IP address
+			clientConnection = new Client(data->{
+				Platform.runLater(()->{
+					clientLog.getItems().add(String.valueOf(data));
+				});
+			}, port, ip);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		clientConnection.start();

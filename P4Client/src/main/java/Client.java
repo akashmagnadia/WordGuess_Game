@@ -15,16 +15,22 @@ public class Client extends Thread{
     boolean clientNumberCaptured; //used to get the client number
 
     private Consumer<Serializable> callBack;
-    Client(Consumer<Serializable> call){
+    
+	int port;
+	String ip;
+	
+    Client(Consumer<Serializable> call, int portNum, String ipAddress){
         callBack = call;
         myPlayerInfo = new GameInfo();
+		port = portNum;
+		ip = ipAddress;
         clientNumberCaptured = false;
     }
 
     public void run() {
 
         try {
-//            socketClient= new Socket("127.0.0.1",5555);
+            socketClient= new Socket(ip,port);
             out = new ObjectOutputStream(socketClient.getOutputStream());
             in = new ObjectInputStream(socketClient.getInputStream());
             socketClient.setTcpNoDelay(true);
