@@ -248,6 +248,7 @@ public class WordGuessServer extends Application {
 			receivedInfo.guessLeft--;
 		}
 		receivedInfo.indexOfLetter = index;
+		receivedInfo.letter = letter;
 
 		if (receivedInfo.workingWord == null) {
 			receivedInfo.workingWord = word;
@@ -260,38 +261,43 @@ public class WordGuessServer extends Application {
 	}
 
 	public GameInfo checkLetterClickedHelper(String category, String letter, GameInfo receivedInfo) {
-		if (category.equals("Animals")) {
-			if (!receivedInfo.animalsCategory_WordOneSolved) {
-				return validGuessChecker(receivedInfo.animalsCategory_WordOne, letter, receivedInfo);
-			} else if (!receivedInfo.animalsCategory_WordTwoSolved) {
-				return validGuessChecker(receivedInfo.animalsCategory_WordTwo, letter, receivedInfo);
-			} else if (!receivedInfo.animalsCategory_WordThreeSolved) {
-				return validGuessChecker(receivedInfo.animalsCategory_WordThree, letter, receivedInfo);
-			} else {
-				System.out.println("In Animals Category: This shouldn't happen");
-			}
-		} else if (category.equals("Food")) {
-			if (!receivedInfo.foodCategory_WordOneSolved) {
-				return validGuessChecker(receivedInfo.foodCategory_WordOne, letter, receivedInfo);
-			} else if (!receivedInfo.foodCategory_WordTwoSolved) {
-				return validGuessChecker(receivedInfo.foodCategory_WordTwo, letter, receivedInfo);
-			} else if (!receivedInfo.foodCategory_WordThreeSolved) {
-				return validGuessChecker(receivedInfo.foodCategory_WordThree, letter, receivedInfo);
-			} else {
-				System.out.println("In Food Category: This shouldn't happen");
-			}
-		} else if (category.equals("States")) {
-			if (!receivedInfo.statesCategory_WordOneSolved) {
-				return validGuessChecker(receivedInfo.statesCategory_WordOne, letter, receivedInfo);
-			} else if (!receivedInfo.statesCategory_WordTwoSolved) {
-				return validGuessChecker(receivedInfo.statesCategory_WordTwo, letter, receivedInfo);
-			} else if (!receivedInfo.statesCategory_WordThreeSolved) {
-				return validGuessChecker(receivedInfo.statesCategory_WordThree, letter, receivedInfo);
-			} else {
-				System.out.println("In States Category: This shouldn't happen");
-			}
-		} else {
-			System.out.println("In checking letter clicked: This shouldn't happen");
+		switch (category) {
+			case "Animals":
+				if (!receivedInfo.animalsCategory_WordOneSolved) {
+					return validGuessChecker(receivedInfo.animalsCategory_WordOne, letter, receivedInfo);
+				} else if (!receivedInfo.animalsCategory_WordTwoSolved) {
+					return validGuessChecker(receivedInfo.animalsCategory_WordTwo, letter, receivedInfo);
+				} else if (!receivedInfo.animalsCategory_WordThreeSolved) {
+					return validGuessChecker(receivedInfo.animalsCategory_WordThree, letter, receivedInfo);
+				} else {
+					System.out.println("In Animals Category: This shouldn't happen");
+				}
+				break;
+			case "Food":
+				if (!receivedInfo.foodCategory_WordOneSolved) {
+					return validGuessChecker(receivedInfo.foodCategory_WordOne, letter, receivedInfo);
+				} else if (!receivedInfo.foodCategory_WordTwoSolved) {
+					return validGuessChecker(receivedInfo.foodCategory_WordTwo, letter, receivedInfo);
+				} else if (!receivedInfo.foodCategory_WordThreeSolved) {
+					return validGuessChecker(receivedInfo.foodCategory_WordThree, letter, receivedInfo);
+				} else {
+					System.out.println("In Food Category: This shouldn't happen");
+				}
+				break;
+			case "States":
+				if (!receivedInfo.statesCategory_WordOneSolved) {
+					return validGuessChecker(receivedInfo.statesCategory_WordOne, letter, receivedInfo);
+				} else if (!receivedInfo.statesCategory_WordTwoSolved) {
+					return validGuessChecker(receivedInfo.statesCategory_WordTwo, letter, receivedInfo);
+				} else if (!receivedInfo.statesCategory_WordThreeSolved) {
+					return validGuessChecker(receivedInfo.statesCategory_WordThree, letter, receivedInfo);
+				} else {
+					System.out.println("In States Category: This shouldn't happen");
+				}
+				break;
+			default:
+				System.out.println("In checking letter clicked: This shouldn't happen");
+				break;
 		}
 		return receivedInfo;
 	}

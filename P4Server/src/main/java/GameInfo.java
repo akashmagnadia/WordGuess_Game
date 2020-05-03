@@ -51,6 +51,7 @@ public class GameInfo implements Serializable {
 
     //this is dynamic variable and will keep changing
     int indexOfLetter = -2;
+    String letter = "";
 
     //when the letter is guessed correctly decrement this number and when this number is at zero then word is solved
     String workingWord = null;
