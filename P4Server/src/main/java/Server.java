@@ -104,7 +104,7 @@ public class Server {
                         ClientThread tempThread = clients.get(receivedInfo.clientNumber - 1);
 
                         //after performing the logic
-//                        tempThread.clientInfo = performLogic(receivedInfo);
+                        tempThread.clientInfo = updateIndexOfLetter(receivedInfo);
 
                         callBack.accept("Received something from Player " + receivedInfo.clientNumber);
 
@@ -127,6 +127,189 @@ public class Server {
                     System.out.println(message);
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+
+            public GameInfo updateIndexOfLetter(GameInfo receivedInfo) {
+                //run this function when letter is clicked, which will update indexOfLetter and return it
+
+                GameInfo toReturnInfo = receivedInfo;
+                if (receivedInfo.playingAnimalsCategory) {
+                    toReturnInfo = checkLetterClicked("Animals", receivedInfo);
+
+                    //if the word is solved
+                    if (toReturnInfo.workingWord != null && toReturnInfo.workingWord.length() <= 0) {
+                        if (!toReturnInfo.animalsCategory_WordOneSolved) {
+                            toReturnInfo.animalsCategory_WordOneSolved = true;
+                        } else if (!toReturnInfo.animalsCategory_WordTwoSolved) {
+                            toReturnInfo.animalsCategory_WordTwoSolved = true;
+                        } else if (!toReturnInfo.animalsCategory_WordThreeSolved) {
+                            toReturnInfo.animalsCategory_WordThreeSolved = true;
+                        } else {
+                            System.out.println("In updateIndexOfLetter animal category: This shouldn't happen");
+                        }
+                    }
+
+                } else if (toReturnInfo.workingWord != null && receivedInfo.playingFoodCategory) {
+                    toReturnInfo = checkLetterClicked("Food", receivedInfo);
+
+                    //if the word is solved
+                    if (toReturnInfo.workingWord.length() <= 0) {
+                        if (!toReturnInfo.foodCategory_WordOneSolved) {
+                            toReturnInfo.foodCategory_WordOneSolved = true;
+                        } else if (!toReturnInfo.foodCategory_WordTwoSolved) {
+                            toReturnInfo.foodCategory_WordTwoSolved = true;
+                        } else if (!toReturnInfo.foodCategory_WordThreeSolved) {
+                            toReturnInfo.foodCategory_WordThreeSolved = true;
+                        } else {
+                            System.out.println("In updateIndexOfLetter food category: This shouldn't happen");
+                        }
+                    }
+
+                } else if (toReturnInfo.workingWord != null && receivedInfo.playingStatesCategory) {
+                    toReturnInfo = checkLetterClicked("States", receivedInfo);
+
+                    //if the word is solved
+                    if (toReturnInfo.workingWord.length() <= 0) {
+                        if (!toReturnInfo.statesCategory_WordOneSolved) {
+                            toReturnInfo.statesCategory_WordOneSolved = true;
+                        } else if (!toReturnInfo.statesCategory_WordTwoSolved) {
+                            toReturnInfo.statesCategory_WordTwoSolved = true;
+                        } else if (!toReturnInfo.statesCategory_WordThreeSolved) {
+                            toReturnInfo.statesCategory_WordThreeSolved = true;
+                        } else {
+                            System.out.println("In updateIndexOfLetter states category: This shouldn't happen");
+                        }
+                    }
+
+                } else {
+                    System.out.println("This shouldn't happen");
+                }
+                return toReturnInfo;
+
+                //indexOfLetter will be changing,
+                //set to -2 to reset
+                //-2 means nothing has been changed
+                //-1 means index is not found
+                //otherwise letter found at that index which is stored in indexOfLetter
+            }
+
+            public GameInfo validGuessChecker(String word, String letter, GameInfo receivedInfo) {
+                int index = word.toLowerCase().indexOf(letter);
+                if (index == -1) {
+                    receivedInfo.guessLeft--;
+                }
+                receivedInfo.indexOfLetter = index;
+                receivedInfo.selectedLetter = letter;
+
+                if (receivedInfo.workingWord == null) {
+                    receivedInfo.workingWord = word;
+                } else {
+                    receivedInfo.workingWord = receivedInfo.workingWord.replace(letter, "");
+                }
+
+                //checks if working word is solved
+                return receivedInfo;
+            }
+
+            public GameInfo checkLetterClickedHelper(String category, String letter, GameInfo receivedInfo) {
+                switch (category) {
+                    case "Animals":
+                        if (!receivedInfo.animalsCategory_WordOneSolved) {
+                            return validGuessChecker(receivedInfo.animalsCategory_WordOne, letter, receivedInfo);
+                        } else if (!receivedInfo.animalsCategory_WordTwoSolved) {
+                            return validGuessChecker(receivedInfo.animalsCategory_WordTwo, letter, receivedInfo);
+                        } else if (!receivedInfo.animalsCategory_WordThreeSolved) {
+                            return validGuessChecker(receivedInfo.animalsCategory_WordThree, letter, receivedInfo);
+                        } else {
+                            System.out.println("In Animals Category: This shouldn't happen");
+                        }
+                        break;
+                    case "Food":
+                        if (!receivedInfo.foodCategory_WordOneSolved) {
+                            return validGuessChecker(receivedInfo.foodCategory_WordOne, letter, receivedInfo);
+                        } else if (!receivedInfo.foodCategory_WordTwoSolved) {
+                            return validGuessChecker(receivedInfo.foodCategory_WordTwo, letter, receivedInfo);
+                        } else if (!receivedInfo.foodCategory_WordThreeSolved) {
+                            return validGuessChecker(receivedInfo.foodCategory_WordThree, letter, receivedInfo);
+                        } else {
+                            System.out.println("In Food Category: This shouldn't happen");
+                        }
+                        break;
+                    case "States":
+                        if (!receivedInfo.statesCategory_WordOneSolved) {
+                            return validGuessChecker(receivedInfo.statesCategory_WordOne, letter, receivedInfo);
+                        } else if (!receivedInfo.statesCategory_WordTwoSolved) {
+                            return validGuessChecker(receivedInfo.statesCategory_WordTwo, letter, receivedInfo);
+                        } else if (!receivedInfo.statesCategory_WordThreeSolved) {
+                            return validGuessChecker(receivedInfo.statesCategory_WordThree, letter, receivedInfo);
+                        } else {
+                            System.out.println("In States Category: This shouldn't happen");
+                        }
+                        break;
+                    default:
+                        System.out.println("In checking letter clicked: This shouldn't happen");
+                        break;
+                }
+                return receivedInfo;
+            }
+
+            public GameInfo checkLetterClicked(String category, GameInfo receivedInfo) {
+                if (receivedInfo.selectedLetter.equals("a")) {
+                    return checkLetterClickedHelper(category, "a", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("b")) {
+                    return checkLetterClickedHelper(category, "b", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("c")) {
+                    return checkLetterClickedHelper(category, "c", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("d")) {
+                    return checkLetterClickedHelper(category, "d", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("e")) {
+                    return checkLetterClickedHelper(category, "e", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("f")) {
+                    return checkLetterClickedHelper(category, "f", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("g")) {
+                    return checkLetterClickedHelper(category, "g", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("h")) {
+                    return checkLetterClickedHelper(category, "h", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("i")) {
+                    return checkLetterClickedHelper(category, "i", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("j")) {
+                    return checkLetterClickedHelper(category, "j", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("k")) {
+                    return checkLetterClickedHelper(category, "k", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("l")) {
+                    return checkLetterClickedHelper(category, "l", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("m")) {
+                    return checkLetterClickedHelper(category, "m", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("n")) {
+                    return checkLetterClickedHelper(category, "n", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("o")) {
+                    return checkLetterClickedHelper(category, "o", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("p")) {
+                    return checkLetterClickedHelper(category, "p", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("q")) {
+                    return checkLetterClickedHelper(category, "q", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("r")) {
+                    return checkLetterClickedHelper(category, "r", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("s")) {
+                    return checkLetterClickedHelper(category, "s", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("t")) {
+                    return checkLetterClickedHelper(category, "t", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("u")) {
+                    return checkLetterClickedHelper(category, "u", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("v")) {
+                    return checkLetterClickedHelper(category, "v", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("w")) {
+                    return checkLetterClickedHelper(category, "w", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("x")) {
+                    return checkLetterClickedHelper(category, "x", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("y")) {
+                    return checkLetterClickedHelper(category, "y", receivedInfo);
+                } else if (receivedInfo.selectedLetter.equals("z")) {
+                    return checkLetterClickedHelper(category, "z", receivedInfo);
+                } else {
+                    System.out.println("In check letter Clicked: No letter is clicked.");
+                    return receivedInfo;
                 }
             }
         } //end of client thread
