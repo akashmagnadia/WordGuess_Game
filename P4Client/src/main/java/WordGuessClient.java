@@ -92,7 +92,7 @@ public class WordGuessClient extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("(Client) Word Guess!!!");
-//		music(); //TODO:Uncomment
+		music();
 		
 		sceneMap = new HashMap<String, Scene>();
 		sceneMap.put("clientStart", createClientGUIStartScreen());
@@ -101,6 +101,7 @@ public class WordGuessClient extends Application {
 		
 		/* Initial Scene Configuration */
 		primaryStage.setScene(sceneMap.get("clientStart"));
+//		primaryStage.setScene(sceneMap.get("clientResults"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		
@@ -123,11 +124,11 @@ public class WordGuessClient extends Application {
 		});
 		
 		playAgain.setOnAction(e->{
-			resetGame();
+			resetGame(primaryStage, sceneMap);
 		});
 		
 		newGame.setOnAction(e->{
-			resetGame();
+			resetGame(primaryStage, sceneMap);
 		});
 
 		connect.setOnAction(e -> {
@@ -444,7 +445,7 @@ public class WordGuessClient extends Application {
 		resultScreen.setLayoutY(20);
 		
 		results.getChildren().addAll(resultScreen);
-		return new Scene(results, 500,400);
+		return new Scene(results, 1000,600);
 	}
 	
 	public void music() {
@@ -656,7 +657,7 @@ public class WordGuessClient extends Application {
 		clientConnection.send(clientConnection.myPlayerInfo, "Next Round - Pick a category");
 	}
 	
-	private static void resetGame() {
+	private static void resetGame(Stage primaryStage, HashMap<String, Scene> sceneMap) {
 		firstBox.setImage(new Image("defaultLetterScreen.png"));
 		secondBox.setImage(new Image("defaultLetterScreen.png"));
 		thirdBox.setImage(new Image("defaultLetterScreen.png"));
@@ -675,6 +676,11 @@ public class WordGuessClient extends Application {
 		
 		clientLog.getItems().clear();
 		clientConnection.send(clientConnection.myPlayerInfo, "New Game Has Started!");
+
+		primaryStage.setScene(sceneMap.get("clientStart"));
+		primaryStage.setScene(sceneMap.get("clientResults"));
+		primaryStage.setResizable(false);
+		primaryStage.show();
 	}
 
 	public void listenForCategory() {
