@@ -29,6 +29,11 @@ public class ClientSideGameInfo implements Serializable {
     //this is dynamic variable and will keep changing
     int indexOfLetter = -2;
     String selectedLetter = "";
+
+    Boolean gameWon = false;
+    Boolean gameLost = false;
+
+    int attempts = 0;
 }
 
 //    // Creating array of string length

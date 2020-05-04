@@ -7,11 +7,11 @@ public class ServerSideGameInfo implements Serializable {
     String statesCategory = "States";
 
     //as the user guesses the word, the char array will be filled with the letters
-    String animalsCategory_WordOne = "Tiger";
+    String animalsCategory_WordOne = "tiger";
     char[] animalsCategory_WordOneArray = new char[animalsCategory_WordOne.length()];
-    String animalsCategory_WordTwo = "Lion";
+    String animalsCategory_WordTwo = "lion";
     char[] animalsCategory_WordTwoArray = new char[animalsCategory_WordTwo.length()];
-    String animalsCategory_WordThree = "Cheetah";
+    String animalsCategory_WordThree = "cheetah";
     char[] animalsCategory_WordThreeArray = new char[animalsCategory_WordThree.length()];
 
     String foodCategory_WordOne = "wordOne";
@@ -52,8 +52,14 @@ public class ServerSideGameInfo implements Serializable {
     int indexOfLetter = -2;
     String selectedLetter = "";
 
-    //when the letter is guessed correctly decrement this number and when this number is at zero then word is solved
+    //when the word length is zero then word is solved
     String workingWord = null;
+    String solvingWord = null;
+
+    Boolean gameWon = false;
+    Boolean gameLost = false;
+
+    int attempts = 0;
 }
 
 //    // Creating array of string length

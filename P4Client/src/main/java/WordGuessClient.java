@@ -54,8 +54,8 @@ public class WordGuessClient extends Application {
 	Label correctGuessesRemaining;
 	Label correctGuesses;
 	
-	Label category;
-	MenuButton categories;
+	static Label category;
+	static MenuButton categories;
 	MenuItem animals,states,food;
 	
 	MenuButton letterChoices;
@@ -63,13 +63,22 @@ public class WordGuessClient extends Application {
 	
 	Image defaultGreenBox = new Image("defaultLetterScreen.png");
 	Image whiteBox = new Image("whiteSpace.png");
-	ImageView firstBox, secondBox, thirdBox, fourthBox, fifthBox, sixthBox, seventhBox, eighthBox, ninthBox, tenthBox;
+	static ImageView firstBox;
+	static ImageView secondBox;
+	static ImageView thirdBox;
+	static ImageView fourthBox;
+	static ImageView fifthBox;
+	static ImageView sixthBox;
+	static ImageView seventhBox;
+	static ImageView eighthBox;
+	static ImageView ninthBox;
+	static ImageView tenthBox;
 	
 	MediaPlayer mediaPlayer;
 
 	int port;
 	String ip;
-	Client clientConnection;
+	static Client clientConnection;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -376,19 +385,30 @@ public class WordGuessClient extends Application {
 		listenForLetter();
 	}
 
-	public void updateOnInterval() {
-		//update UI 2 seconds after function is called
-
-		Timer t = new Timer();
-		t.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				updateLetterBox();
-			}
-		}, 2000, 1000);
+	public static void updateOnChange() {
+		updateLetterBox();
+		checkEndOfRound();
+		checkAttempts();
+		checkWonOrLose();
 	}
 
-	public void updateLetterBox() {
+	public static void checkWonOrLose() {
+		if (clientConnection.myPlayerInfo.gameWon) {
+			resetForNextRound();
+			category.setText("Game Won");
+		} else if (clientConnection.myPlayerInfo.gameLost) {
+			resetForNextRound();
+			category.setText("Game Lost");
+		}
+	}
+
+	public static void checkAttempts() {
+		if (clientConnection.myPlayerInfo.attempts >= 3) {
+			clientConnection.myPlayerInfo.gameLost = true;
+		}
+	}
+
+	public static void updateLetterBox() {
 		if (clientConnection != null) {
 			if (clientConnection.myPlayerInfo.indexOfLetter == 0) {
 				updateLetterBoxHelper(firstBox);
@@ -414,7 +434,7 @@ public class WordGuessClient extends Application {
 		}
 	}
 
-	public void updateLetterBoxHelper(ImageView boxToModify) {
+	public static void updateLetterBoxHelper(ImageView boxToModify) {
 		if (clientConnection.myPlayerInfo.selectedLetter.equals("a")) {
 			boxToModify.setImage(new Image("letterA.png"));
 		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("b")) {
@@ -472,30 +492,69 @@ public class WordGuessClient extends Application {
 		}
 	}
 
-	public void checkEndOfRound() {
+	public static void checkEndOfRound() {
 		ClientSideGameInfo gameInfo = clientConnection.myPlayerInfo;
 
 		if (gameInfo.playingAnimalsCategory) {
-			if (!gameInfo.animalsCategory_WordOneSolved) {
-
-			} else if (!gameInfo.animalsCategory_WordTwoSolved) {
-
-			} else if (!gameInfo.animalsCategory_WordThreeSolved) {
-
+			if (gameInfo.animalsCategory_WordThreeSolved) {
+				gameInfo.gameWon = true;
+			} else if (gameInfo.animalsCategory_WordTwoSolved) {
+				resetForNextRound();
+			} else if (gameInfo.animalsCategory_WordOneSolved) {
+				resetForNextRound();
 			} else {
 
 			}
 		} else if (gameInfo.playingFoodCategory) {
 			if (!gameInfo.foodCategory_WordOneSolved) {
-
+				gameInfo.gameWon = true;
 			} else if (!gameInfo.foodCategory_WordTwoSolved) {
-
+				resetForNextRound();
 			} else if (!gameInfo.foodCategory_WordThreeSolved) {
-
+				resetForNextRound();
 			} else {
 
 			}
+		} else if (gameInfo.playingStatesCategory) {
+			if (!gameInfo.statesCategory_WordOneSolved) {
+				gameInfo.gameWon = true;
+			} else if (!gameInfo.statesCategory_WordTwoSolved) {
+				resetForNextRound();
+			} else if (!gameInfo.statesCategory_WordThreeSolved) {
+				resetForNextRound();
+			} else {
+
+			}
+		} else {
+			//not playing any category
 		}
+
+		clientConnection.myPlayerInfo = gameInfo;
+	}
+
+	private static void resetForNextRound() {
+		firstBox.setImage(new Image("defaultLetterScreen.png"));
+		secondBox.setImage(new Image("defaultLetterScreen.png"));
+		thirdBox.setImage(new Image("defaultLetterScreen.png"));
+		fourthBox.setImage(new Image("defaultLetterScreen.png"));
+		fifthBox.setImage(new Image("defaultLetterScreen.png"));
+		sixthBox.setImage(new Image("defaultLetterScreen.png"));
+		seventhBox.setImage(new Image("defaultLetterScreen.png"));
+		eighthBox.setImage(new Image("defaultLetterScreen.png"));
+		ninthBox.setImage(new Image("defaultLetterScreen.png"));
+		tenthBox.setImage(new Image("defaultLetterScreen.png"));
+
+		categories.setDisable(false);
+
+		clientConnection.myPlayerInfo.attempts++;
+		clientConnection.myPlayerInfo.selectedLetter = "";
+		clientConnection.myPlayerInfo.indexOfLetter = -1;
+
+		clientConnection.myPlayerInfo.playingStatesCategory = false;
+		clientConnection.myPlayerInfo.playingFoodCategory = false;
+		clientConnection.myPlayerInfo.playingAnimalsCategory = false;
+
+		clientConnection.send(clientConnection.myPlayerInfo, "Next Round");
 	}
 
 	public void listenForCategory() {
@@ -534,157 +593,131 @@ public class WordGuessClient extends Application {
 		letA.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "a";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter A");
-			updateOnInterval();
 		});
 
 		letB.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "b";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter B");
-			updateOnInterval();
 		});
 
 		letC.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "c";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter C");
-			updateOnInterval();
 		});
 
 		letD.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "d";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter D");
-			updateOnInterval();
 		});
 
 		letE.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "e";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter E");
-			updateOnInterval();
 		});
 
 		letF.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "f";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter F");
-			updateOnInterval();
 		});
 
 		letG.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "g";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter G");
-			updateOnInterval();
 		});
 
 		letH.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "h";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter H");
-			updateOnInterval();
 		});
 
 		letI.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "i";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter I");
-			updateOnInterval();
 		});
 
 		letJ.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "j";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter J");
-			updateOnInterval();
 		});
 
 		letK.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "k";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter K");
-			updateOnInterval();
 		});
 
 		letL.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "l";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter L");
-			updateOnInterval();
 		});
 
 		letM.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "m";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter M");
-			updateOnInterval();
 		});
 
 		letN.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "n";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter N");
-			updateOnInterval();
 		});
 
 		letO.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "o";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter O");
-			updateOnInterval();
 		});
 
 		letP.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "p";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter P");
-			updateOnInterval();
 		});
 
 		letQ.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "q";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter Q");
-			updateOnInterval();
 		});
 
 		letR.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "r";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter R");
-			updateOnInterval();
 		});
 
 		letS.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "s";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter S");
-			updateOnInterval();
 		});
 
 		letT.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "t";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter T");
-			updateOnInterval();
 		});
 
 		letU.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "u";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter U");
-			updateOnInterval();
 		});
 
 		letV.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "v";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter V");
-			updateOnInterval();
 		});
 
 		letW.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "w";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter W");
-			updateOnInterval();
 		});
 
 		letX.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "x";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter X");
-			updateOnInterval();
 		});
 
 		letY.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "y";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter Y");
-			updateOnInterval();
 		});
 
 		letZ.setOnAction(event -> {
 			clientConnection.myPlayerInfo.selectedLetter = "z";
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter Z");
-			updateOnInterval();
 		});
 	}
 }

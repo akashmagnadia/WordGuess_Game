@@ -216,9 +216,9 @@ public class Server {
 
                 if (receivedInfo.workingWord == null) {
                     receivedInfo.workingWord = word;
-                } else {
-                    receivedInfo.workingWord = receivedInfo.workingWord.replace(letter, "");
                 }
+
+                receivedInfo.workingWord = receivedInfo.workingWord.replace(letter, "");
 
                 //checks if working word is solved
                 return receivedInfo;
@@ -348,6 +348,7 @@ public class Server {
                 serverSideGameInfo.statesCategory_WordThreeSolved = clientSideGameInfo.statesCategory_WordThreeSolved;
 
                 serverSideGameInfo.guessLeft = clientSideGameInfo.guessLeft;
+                serverSideGameInfo.indexOfLetter = clientSideGameInfo.indexOfLetter;
 
                 return serverSideGameInfo;
             }

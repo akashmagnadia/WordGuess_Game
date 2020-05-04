@@ -47,9 +47,9 @@ public class Client extends Thread{
                     clientNumberCaptured = true;
                 }
 
-                //TODO: Repeat this in for loop to pass info to correct client
                 if (myPlayerInfo.clientNumber == receivedInfo.clientNumber) {
                     myPlayerInfo = receivedInfo;
+                    WordGuessClient.updateOnChange();
                 }
             }
             catch(Exception ignored) {}
