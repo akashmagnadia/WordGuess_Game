@@ -44,7 +44,7 @@ public class WordGuessClient extends Application {
 
 	HashMap<String, Scene> sceneMap;
 	
-	ListView<String> clientLog;
+	static ListView<String> clientLog;
 	ObservableList<String> info;
 	
 	Button connect;
@@ -120,6 +120,14 @@ public class WordGuessClient extends Application {
 		quit.setOnAction(e->{
 			Platform.exit();
 			System.exit(0);
+		});
+		
+		playAgain.setOnAction(e->{
+			resetGame();
+		});
+		
+		newGame.setOnAction(e->{
+			resetGame();
 		});
 
 		connect.setOnAction(e -> {
@@ -616,6 +624,27 @@ public class WordGuessClient extends Application {
 		clientConnection.myPlayerInfo.playingAnimalsCategory = false;
 
 		clientConnection.send(clientConnection.myPlayerInfo, "Next Round");
+	}
+	
+	private static void resetGame() {
+		firstBox.setImage(new Image("defaultLetterScreen.png"));
+		secondBox.setImage(new Image("defaultLetterScreen.png"));
+		thirdBox.setImage(new Image("defaultLetterScreen.png"));
+		fourthBox.setImage(new Image("defaultLetterScreen.png"));
+		fifthBox.setImage(new Image("defaultLetterScreen.png"));
+		sixthBox.setImage(new Image("defaultLetterScreen.png"));
+		seventhBox.setImage(new Image("defaultLetterScreen.png"));
+		eighthBox.setImage(new Image("defaultLetterScreen.png"));
+		ninthBox.setImage(new Image("defaultLetterScreen.png"));
+		tenthBox.setImage(new Image("defaultLetterScreen.png"));
+		
+		categories.setDisable(false);
+		category.setText("Pick a Category!");
+		
+		clientConnection.myPlayerInfo = new ClientSideGameInfo();
+		
+		clientLog.getItems().clear();
+		clientConnection.send(clientConnection.myPlayerInfo, "New Game Has Started!");
 	}
 
 	public void listenForCategory() {
