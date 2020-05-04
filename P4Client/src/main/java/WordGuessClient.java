@@ -49,7 +49,7 @@ public class WordGuessClient extends Application {
 	
 	Button connect;
 	TextField IPInput, portInput;
-	MenuItem exit, mute, unmute;
+	MenuItem exit, mute, unmute, newGame;
 	
 	Label correctGuessesRemaining;
 	Label correctGuesses;
@@ -74,6 +74,10 @@ public class WordGuessClient extends Application {
 	static ImageView ninthBox;
 	static ImageView tenthBox;
 	
+	Button playAgain;
+	Button quit;
+	Label result;
+	
 	MediaPlayer mediaPlayer;
 
 	int port;
@@ -93,6 +97,7 @@ public class WordGuessClient extends Application {
 		sceneMap = new HashMap<String, Scene>();
 		sceneMap.put("clientStart", createClientGUIStartScreen());
 		sceneMap.put("clientGameplay", createClientGUIGameplay());
+		sceneMap.put("clientResults", createResultScene());
 		
 		/* Initial Scene Configuration */
 		primaryStage.setScene(sceneMap.get("clientStart"));
@@ -108,6 +113,11 @@ public class WordGuessClient extends Application {
 		});
 
 		exit.setOnAction(e->{
+			Platform.exit();
+			System.exit(0);
+		});
+		
+		quit.setOnAction(e->{
 			Platform.exit();
 			System.exit(0);
 		});
@@ -229,8 +239,9 @@ public class WordGuessClient extends Application {
 		exit = new MenuItem("Exit");
 		mute = new MenuItem("Mute Music");
 		unmute = new MenuItem("Play Music");
+		newGame = new MenuItem("New Game");
 		
-		options.getItems().addAll(unmute,mute,exit);
+		options.getItems().addAll(unmute,mute,newGame,exit);
 		menuBar.getMenus().addAll(options);
 		/* ===== Menubar setup ===== */
 		
@@ -295,7 +306,7 @@ public class WordGuessClient extends Application {
 		
 		categories.setText("Pick a category");
 		categories.getItems().addAll(animals,food,states);
-		categories.setPrefSize(215, 40);
+		categories.setPrefSize(120, 40);
 		categories.setStyle("-fx-background-color: aqua;");
 		categories.setLayoutX(170);
 		categories.setLayoutY(550);
@@ -333,10 +344,10 @@ public class WordGuessClient extends Application {
 		letterChoices.setText("Guess a letter!");
 		letterChoices.getItems().addAll(letA,letB,letC,letD,letE,letF,letG,letH,letI,
 				letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ);
-		letterChoices.setPrefSize(215, 40);
+		letterChoices.setPrefSize(120, 40);
 		letterChoices.setStyle("-fx-background-color: coral;");
 		letterChoices.setTextFill(Color.WHITE);
-		letterChoices.setLayoutX(400);
+		letterChoices.setLayoutX(300);
 		letterChoices.setLayoutY(550);
 		/* Drop down menu for letter selection */
 
@@ -370,6 +381,54 @@ public class WordGuessClient extends Application {
 		
 		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices, guessesBox, clientLog);
 		return new Scene(gameplay, 1000, 800);
+	}
+	
+	public Scene createResultScene() {
+		Pane results = new Pane();
+		DropShadow shadow = new DropShadow();
+
+		/* ===== Setup background ===== */
+		Image backgroundImage = new Image("resultsBack.jpg");
+		BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true);
+		results.setBackground(new Background(new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER,bSize)));
+		/* ===== Setup background ===== */
+		
+		/* Result label */
+		result = new Label();
+		result.setStyle("-fx-border-color: gold;");
+		result.setPrefSize(440,250);
+		result.setTextAlignment(TextAlignment.CENTER);
+		result.setAlignment(Pos.CENTER);
+		result.setFont(Font.font("Rockwell",64));
+		result.setTextFill(Color.GOLD);
+		/* Result label */
+		
+		/* Play Again and Quit Buttons */
+		playAgain = new Button("Play Again");
+		playAgain.setStyle("-fx-background-color: purple;" + "-fx-font: 25 Rockwell;");
+		playAgain.setTextFill(Color.WHITE);
+		playAgain.setEffect(shadow);
+		playAgain.setPrefSize(200, 50);
+		playAgain.setLayoutX(100);
+		playAgain.setLayoutY(350);
+		
+		quit = new Button("Quit");
+		quit.setStyle("-fx-background-color: purple;" + "-fx-font: 25 Rockwell;");
+		quit.setTextFill(Color.WHITE);
+		quit.setEffect(shadow);
+		quit.setPrefSize(200, 50);
+		quit.setLayoutX(100);
+		quit.setLayoutY(350);
+		
+		HBox resultButtons = new HBox(40,playAgain,quit);
+		/* Play Again and Quit Buttons */
+		
+		VBox resultScreen = new VBox(20,result,resultButtons);
+		resultScreen.setLayoutX(30);
+		resultScreen.setLayoutY(20);
+		
+		results.getChildren().addAll(resultScreen);
+		return new Scene(results, 500,400);
 	}
 	
 	public void music() {
