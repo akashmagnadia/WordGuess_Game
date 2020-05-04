@@ -76,7 +76,7 @@ public class WordGuessClient extends Application {
 	
 	Button playAgain;
 	Button quit;
-	Label result;
+	static Label result;
 	
 	MediaPlayer mediaPlayer;
 
@@ -472,6 +472,7 @@ public class WordGuessClient extends Application {
 		if (clientConnection.myPlayerInfo.gameWon) {
 			Platform.runLater(() -> {
 				category.setText("Game Won");
+				result.setText("You Won the Game!");
 				primaryStage.setScene(sceneMap.get("clientResults"));
 				primaryStage.setResizable(false);
 				primaryStage.show();
@@ -479,6 +480,7 @@ public class WordGuessClient extends Application {
 		} else if (clientConnection.myPlayerInfo.gameLost) {
 			Platform.runLater(() -> {
 				category.setText("Game Lost");
+				result.setText("You Lost the Game!");
 				primaryStage.setScene(sceneMap.get("clientResults"));
 				primaryStage.setResizable(false);
 				primaryStage.show();
