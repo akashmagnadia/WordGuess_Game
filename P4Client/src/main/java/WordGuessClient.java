@@ -605,6 +605,8 @@ public class WordGuessClient extends Application {
 
 		categories.setDisable(false);
 
+		category.setText("Next Round - Pick a category");
+
 		clientConnection.myPlayerInfo.attempts++;
 		clientConnection.myPlayerInfo.selectedLetter = "";
 		clientConnection.myPlayerInfo.indexOfLetter = -1;

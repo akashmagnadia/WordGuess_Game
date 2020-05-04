@@ -132,16 +132,6 @@ public class Server {
                 }
             } //end of run
 
-            public void send(ServerSideGameInfo info, String message) {
-                try {
-                    out.writeObject(info);
-                    callBack.accept(message);
-                    System.out.println(message);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
             public ServerSideGameInfo updateIndexOfLetter(ServerSideGameInfo receivedInfo) {
                 //run this function when letter is clicked, which will update indexOfLetter and return it
 
