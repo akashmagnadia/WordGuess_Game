@@ -91,7 +91,7 @@ public class WordGuessClient extends Application {
 		sceneMap.put("clientResults", createResultScene());
 		
 		/* Initial Scene Configuration */
-		primaryStage.setScene(sceneMap.get("clientGameplay"));
+		primaryStage.setScene(sceneMap.get("clientStart"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		
@@ -104,6 +104,11 @@ public class WordGuessClient extends Application {
 		});
 
 		exit.setOnAction(e->{
+			Platform.exit();
+			System.exit(0);
+		});
+		
+		quit.setOnAction(e->{
 			Platform.exit();
 			System.exit(0);
 		});
