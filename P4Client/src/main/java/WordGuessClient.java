@@ -9,15 +9,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import java.io.OutputStream;
-import java.io.PrintStream;
+
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -36,13 +36,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-
-import java.io.IOException;
-import java.net.Socket;
-import java.nio.file.Paths;
 
 //Look at GameInfo for all the variables that can be utilized to help make the UI
 
@@ -125,7 +119,7 @@ public class WordGuessClient extends Application {
 			}
 		});
 
-		listenForCategory();
+		listenFor();
 	}
 	
 
@@ -336,7 +330,7 @@ public class WordGuessClient extends Application {
 		letterChoices.setLayoutX(400);
 		letterChoices.setLayoutY(550);
 		/* Drop down menu for letter selection */
-		
+
 		/* Guesses Remaining Labels */
 		correctGuessesRemaining = new Label("Guesses Remaining:");
 		correctGuesses = new Label("6");
@@ -355,7 +349,7 @@ public class WordGuessClient extends Application {
 		guessesBox.setLayoutX(430);
 		guessesBox.setLayoutY(530);
 		/* Guesses Remaining Labels */
-
+		
 		/* Client log */
 		info = FXCollections.observableArrayList();
 		clientLog = new ListView<String>(info);
@@ -365,9 +359,8 @@ public class WordGuessClient extends Application {
 		clientLog.setLayoutY(540);
 		/* Client log */
 		
-		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices,guessesBox,clientLog);
+		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices, guessesBox, clientLog);
 		return new Scene(gameplay, 1000, 800);
-
 	}
 	
 	public void music() {
