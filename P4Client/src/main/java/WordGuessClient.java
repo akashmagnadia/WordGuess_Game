@@ -52,7 +52,7 @@ public class WordGuessClient extends Application {
 	MenuItem exit, mute, unmute, newGame;
 	
 	Label correctGuessesRemaining;
-	Label correctGuesses;
+	static Label correctGuesses;
 	
 	static Label category;
 	static MenuButton categories;
@@ -137,6 +137,14 @@ public class WordGuessClient extends Application {
 				System.exit(0);
 			}
 		});
+
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				checkWonOrLose(primaryStage, sceneMap);
+			}
+		}, 10000, 1000);
 
 		listenFor();
 	}
@@ -448,16 +456,26 @@ public class WordGuessClient extends Application {
 		updateLetterBox();
 		checkEndOfRound();
 		checkAttempts();
-		checkWonOrLose();
+
+		Platform.runLater(() ->  correctGuesses.setText(String.valueOf(clientConnection.myPlayerInfo.guessLeft)));
 	}
 
-	public static void checkWonOrLose() {
+	public static void checkWonOrLose(Stage primaryStage, HashMap<String, Scene> sceneMap) {
 		if (clientConnection.myPlayerInfo.gameWon) {
-			resetForNextRound();
-			category.setText("Game Won");
+			Platform.runLater(() -> {
+				category.setText("Game Won");
+				primaryStage.setScene(sceneMap.get("clientResults"));
+				primaryStage.setResizable(false);
+				primaryStage.show();
+			});
 		} else if (clientConnection.myPlayerInfo.gameLost) {
-			resetForNextRound();
-			category.setText("Game Lost");
+			Platform.runLater(() -> {
+				category.setText("Game Lost");
+				primaryStage.setScene(sceneMap.get("clientResults"));
+				primaryStage.setResizable(false);
+				primaryStage.show();
+			});
+
 		}
 	}
 
@@ -554,13 +572,19 @@ public class WordGuessClient extends Application {
 	public static void checkEndOfRound() {
 		ClientSideGameInfo gameInfo = clientConnection.myPlayerInfo;
 
+		if (gameInfo.guessLeft == 0) {
+			resetForNextRound();
+		}
+
 		if (gameInfo.playingAnimalsCategory) {
 			if (gameInfo.animalsCategory_WordThreeSolved) {
 				gameInfo.gameWon = true;
 			} else if (gameInfo.animalsCategory_WordTwoSolved) {
 				resetForNextRound();
+				gameInfo.attempts = 0;
 			} else if (gameInfo.animalsCategory_WordOneSolved) {
 				resetForNextRound();
+				gameInfo.attempts = 0;
 			} else {
 
 			}
@@ -569,8 +593,10 @@ public class WordGuessClient extends Application {
 				gameInfo.gameWon = true;
 			} else if (!gameInfo.foodCategory_WordTwoSolved) {
 				resetForNextRound();
+				gameInfo.attempts = 0;
 			} else if (!gameInfo.foodCategory_WordThreeSolved) {
 				resetForNextRound();
+				gameInfo.attempts = 0;
 			} else {
 
 			}
@@ -579,8 +605,10 @@ public class WordGuessClient extends Application {
 				gameInfo.gameWon = true;
 			} else if (!gameInfo.statesCategory_WordTwoSolved) {
 				resetForNextRound();
+				gameInfo.attempts = 0;
 			} else if (!gameInfo.statesCategory_WordThreeSolved) {
 				resetForNextRound();
+				gameInfo.attempts = 0;
 			} else {
 
 			}
@@ -605,7 +633,7 @@ public class WordGuessClient extends Application {
 
 		categories.setDisable(false);
 
-		category.setText("Next Round - Pick a category");
+		Platform.runLater(() -> category.setText("Next Round - Pick a category"));
 
 		clientConnection.myPlayerInfo.attempts++;
 		clientConnection.myPlayerInfo.selectedLetter = "";
@@ -615,7 +643,9 @@ public class WordGuessClient extends Application {
 		clientConnection.myPlayerInfo.playingFoodCategory = false;
 		clientConnection.myPlayerInfo.playingAnimalsCategory = false;
 
-		clientConnection.send(clientConnection.myPlayerInfo, "Next Round");
+		clientConnection.myPlayerInfo.guessLeft = 6;
+
+		clientConnection.send(clientConnection.myPlayerInfo, "Next Round - Pick a category");
 	}
 
 	public void listenForCategory() {
@@ -626,7 +656,7 @@ public class WordGuessClient extends Application {
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on States category");
 
 			categories.setDisable(true);
-			category.setText("States");
+			Platform.runLater(() -> category.setText("States"));
 		});
 
 		food.setOnAction(event -> {
@@ -636,7 +666,7 @@ public class WordGuessClient extends Application {
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Food category");
 
 			categories.setDisable(true);
-			category.setText("Food");
+			Platform.runLater(() -> category.setText("Food"));
 		});
 
 		animals.setOnAction(event -> {
@@ -646,7 +676,7 @@ public class WordGuessClient extends Application {
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Animals category");
 
 			categories.setDisable(true);
-			category.setText("Animals");
+			Platform.runLater(() -> category.setText("Animals"));
 		});
 	}
 

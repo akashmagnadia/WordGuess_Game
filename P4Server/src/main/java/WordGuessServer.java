@@ -57,6 +57,7 @@ public class WordGuessServer extends Application {
 		
 		/* Initialize the scene */
 		primaryStage.setScene(sceneMap.get("serverStart"));
+		primaryStage.setResizable(false);
 		primaryStage.show();
 
 		/* Button actions */
