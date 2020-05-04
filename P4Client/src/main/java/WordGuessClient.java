@@ -92,7 +92,7 @@ public class WordGuessClient extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("(Client) Word Guess!!!");
-		music();
+//		music();
 		
 		sceneMap = new HashMap<String, Scene>();
 		sceneMap.put("clientStart", createClientGUIStartScreen());

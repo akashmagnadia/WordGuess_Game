@@ -14,18 +14,18 @@ public class ServerSideGameInfo implements Serializable {
     String animalsCategory_WordThree = "cheetah";
     char[] animalsCategory_WordThreeArray = new char[animalsCategory_WordThree.length()];
 
-    String foodCategory_WordOne = "wordOne";
+    String foodCategory_WordOne = "fries";
     char[] foodCategory_WordOneArray = new char[foodCategory_WordOne.length()];
-    String foodCategory_WordTwo = "wordTwo";
+    String foodCategory_WordTwo = "pancake";
     char[] foodCategory_WordTwoArray = new char[foodCategory_WordTwo.length()];
-    String foodCategory_WordThree = "wordThree";
+    String foodCategory_WordThree = "pizza";
     char[] foodCategory_WordThreeArray = new char[foodCategory_WordThree.length()];
 
-    String statesCategory_WordOne = "wordOne";
+    String statesCategory_WordOne = "illinois";
     char[] statesCategory_WordOneArray = new char[statesCategory_WordOne.length()];
-    String statesCategory_WordTwo = "wordTwo";
+    String statesCategory_WordTwo = "florida";
     char[] statesCategory_WordTwoArray = new char[statesCategory_WordTwo.length()];
-    String statesCategory_WordThree = "wordThree";
+    String statesCategory_WordThree = "wisconsin";
     char[] statesCategory_WordThreeArray = new char[statesCategory_WordThree.length()];
 
     Boolean playingAnimalsCategory = false;
@@ -61,11 +61,3 @@ public class ServerSideGameInfo implements Serializable {
 
     int attempts = 0;
 }
-
-//    // Creating array of string length
-//    char[] ch = new char[str.length()];
-//
-//// Copy character by character into array
-//        for (int i = 0; i < str.length(); i++) {
-//        ch[i] = str.charAt(i);
-//        }

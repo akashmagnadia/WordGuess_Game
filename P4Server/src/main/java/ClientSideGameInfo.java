@@ -35,11 +35,3 @@ public class ClientSideGameInfo implements Serializable {
 
     int attempts = 0;
 }
-
-//    // Creating array of string length
-//    char[] ch = new char[str.length()];
-//
-//// Copy character by character into array
-//        for (int i = 0; i < str.length(); i++) {
-//        ch[i] = str.charAt(i);
-//        }
