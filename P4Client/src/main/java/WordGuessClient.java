@@ -679,8 +679,7 @@ public class WordGuessClient extends Application {
 		clientLog.getItems().clear();
 		clientConnection.send(clientConnection.myPlayerInfo, "New Game Has Started!");
 
-		primaryStage.setScene(sceneMap.get("clientStart"));
-		primaryStage.setScene(sceneMap.get("clientResults"));
+		primaryStage.setScene(sceneMap.get("clientGameplay"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 	}
