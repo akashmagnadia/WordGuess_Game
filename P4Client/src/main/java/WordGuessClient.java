@@ -464,7 +464,6 @@ public class WordGuessClient extends Application {
 	public static void updateOnChange() {
 		updateLetterBox();
 		checkEndOfRound();
-		checkAttempts();
 
 		Platform.runLater(() ->  correctGuesses.setText(String.valueOf(clientConnection.myPlayerInfo.guessLeft)));
 	}
@@ -487,12 +486,6 @@ public class WordGuessClient extends Application {
 				primaryStage.show();
 			});
 
-		}
-	}
-
-	public static void checkAttempts() {
-		if (clientConnection.myPlayerInfo.attempts >= 3) {
-			clientConnection.myPlayerInfo.gameLost = true;
 		}
 	}
 
@@ -587,44 +580,14 @@ public class WordGuessClient extends Application {
 			resetForNextRound();
 		}
 
-		if (gameInfo.playingAnimalsCategory) {
-			if (gameInfo.animalsCategory_WordThreeSolved) {
-				gameInfo.gameWon = true;
-			} else if (gameInfo.animalsCategory_WordTwoSolved) {
-				resetForNextRound();
-				gameInfo.attempts = 0;
-			} else if (gameInfo.animalsCategory_WordOneSolved) {
-				resetForNextRound();
-				gameInfo.attempts = 0;
-			} else {
+		if ((gameInfo.animalsCategory_WordOneSolved || gameInfo.animalsCategory_WordTwoSolved || gameInfo.animalsCategory_WordThreeSolved) &&
+			gameInfo.statesCategory_WordOneSolved || gameInfo.statesCategory_WordTwoSolved || gameInfo.statesCategory_WordThreeSolved &&
+			gameInfo.foodCategory_WordOneSolved || gameInfo.foodCategory_WordTwoSolved || gameInfo.foodCategory_WordThreeSolved) {
+			gameInfo.gameWon = true;
+		}
 
-			}
-		} else if (gameInfo.playingFoodCategory) {
-			if (!gameInfo.foodCategory_WordOneSolved) {
-				gameInfo.gameWon = true;
-			} else if (!gameInfo.foodCategory_WordTwoSolved) {
-				resetForNextRound();
-				gameInfo.attempts = 0;
-			} else if (!gameInfo.foodCategory_WordThreeSolved) {
-				resetForNextRound();
-				gameInfo.attempts = 0;
-			} else {
-
-			}
-		} else if (gameInfo.playingStatesCategory) {
-			if (!gameInfo.statesCategory_WordOneSolved) {
-				gameInfo.gameWon = true;
-			} else if (!gameInfo.statesCategory_WordTwoSolved) {
-				resetForNextRound();
-				gameInfo.attempts = 0;
-			} else if (!gameInfo.statesCategory_WordThreeSolved) {
-				resetForNextRound();
-				gameInfo.attempts = 0;
-			} else {
-
-			}
-		} else {
-			//not playing any category
+		if (gameInfo.attempts == 3) {
+			gameInfo.gameLost = true;
 		}
 
 		clientConnection.myPlayerInfo = gameInfo;

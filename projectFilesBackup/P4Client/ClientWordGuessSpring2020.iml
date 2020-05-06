@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="app-engine-standard" name="Google App Engine">
+    <facet type="google-app-engine" name="Google App Engine">
       <configuration />
     </facet>
   </component>
@@ -34,4 +34,3 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:12" level="project" />
   </component>
 </module>
-

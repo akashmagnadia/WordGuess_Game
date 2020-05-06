@@ -142,10 +142,16 @@ public class Server {
                     //if the word is solved
                     if (toReturnInfo.workingWord != null && toReturnInfo.workingWord.length() <= 0) {
                         if (!toReturnInfo.animalsCategory_WordOneSolved) {
+                            toReturnInfo.attempts = 0;
+                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.animalsCategory_WordOneSolved = true;
                         } else if (!toReturnInfo.animalsCategory_WordTwoSolved) {
+                            toReturnInfo.attempts = 0;
+                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.animalsCategory_WordTwoSolved = true;
                         } else if (!toReturnInfo.animalsCategory_WordThreeSolved) {
+                            toReturnInfo.attempts = 0;
+                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.animalsCategory_WordThreeSolved = true;
                         } else {
                             System.out.println("In updateIndexOfLetter animal category: This shouldn't happen");
@@ -158,10 +164,16 @@ public class Server {
                     //if the word is solved
                     if (toReturnInfo.workingWord.length() <= 0) {
                         if (!toReturnInfo.foodCategory_WordOneSolved) {
+                            toReturnInfo.attempts = 0;
+                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.foodCategory_WordOneSolved = true;
                         } else if (!toReturnInfo.foodCategory_WordTwoSolved) {
+                            toReturnInfo.attempts = 0;
+                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.foodCategory_WordTwoSolved = true;
                         } else if (!toReturnInfo.foodCategory_WordThreeSolved) {
+                            toReturnInfo.attempts = 0;
+                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.foodCategory_WordThreeSolved = true;
                         } else {
                             System.out.println("In updateIndexOfLetter food category: This shouldn't happen");
@@ -174,10 +186,16 @@ public class Server {
                     //if the word is solved
                     if (toReturnInfo.workingWord.length() <= 0) {
                         if (!toReturnInfo.statesCategory_WordOneSolved) {
+                            toReturnInfo.attempts = 0;
+                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.statesCategory_WordOneSolved = true;
                         } else if (!toReturnInfo.statesCategory_WordTwoSolved) {
+                            toReturnInfo.attempts = 0;
+                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.statesCategory_WordTwoSolved = true;
                         } else if (!toReturnInfo.statesCategory_WordThreeSolved) {
+                            toReturnInfo.attempts = 0;
+                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.statesCategory_WordThreeSolved = true;
                         } else {
                             System.out.println("In updateIndexOfLetter states category: This shouldn't happen");
