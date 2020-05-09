@@ -7,25 +7,25 @@ public class ServerSideGameInfo implements Serializable {
     String statesCategory = "States";
 
     //as the user guesses the word, the char array will be filled with the letters
-    String animalsCategory_WordOne = "tiger";
+    String animalsCategory_WordOne = "cheetah".toLowerCase();
     char[] animalsCategory_WordOneArray = new char[animalsCategory_WordOne.length()];
-    String animalsCategory_WordTwo = "lion";
+    String animalsCategory_WordTwo = "lion".toLowerCase();
     char[] animalsCategory_WordTwoArray = new char[animalsCategory_WordTwo.length()];
-    String animalsCategory_WordThree = "cheetah";
+    String animalsCategory_WordThree = "tiger".toLowerCase();
     char[] animalsCategory_WordThreeArray = new char[animalsCategory_WordThree.length()];
 
-    String foodCategory_WordOne = "fries";
+    String foodCategory_WordOne = "fries".toLowerCase();
     char[] foodCategory_WordOneArray = new char[foodCategory_WordOne.length()];
-    String foodCategory_WordTwo = "pancake";
+    String foodCategory_WordTwo = "pancake".toLowerCase();
     char[] foodCategory_WordTwoArray = new char[foodCategory_WordTwo.length()];
-    String foodCategory_WordThree = "pizza";
+    String foodCategory_WordThree = "pizza".toLowerCase();
     char[] foodCategory_WordThreeArray = new char[foodCategory_WordThree.length()];
 
-    String statesCategory_WordOne = "illinois";
+    String statesCategory_WordOne = "illinois".toLowerCase();
     char[] statesCategory_WordOneArray = new char[statesCategory_WordOne.length()];
-    String statesCategory_WordTwo = "florida";
+    String statesCategory_WordTwo = "florida".toLowerCase();
     char[] statesCategory_WordTwoArray = new char[statesCategory_WordTwo.length()];
-    String statesCategory_WordThree = "wisconsin";
+    String statesCategory_WordThree = "wisconsin".toLowerCase();
     char[] statesCategory_WordThreeArray = new char[statesCategory_WordThree.length()];
 
     Boolean playingAnimalsCategory = false;
@@ -54,6 +54,7 @@ public class ServerSideGameInfo implements Serializable {
 
     //when the word length is zero then word is solved
     String workingWord = null;
+    String workingWordForLength = null;
     String solvingWord = null;
 
     Boolean gameWon = false;

@@ -140,63 +140,66 @@ public class Server {
                     toReturnInfo = checkLetterClicked("Animals", receivedInfo);
 
                     //if the word is solved
-                    if (toReturnInfo.workingWord != null && toReturnInfo.workingWord.length() <= 0) {
+                    if (toReturnInfo.workingWordForLength != null && toReturnInfo.workingWordForLength.length() <= 0) {
+                        toReturnInfo.attempts = 0;
+                        toReturnInfo.guessLeft = 0;
+                        toReturnInfo.workingWordForLength = null;
+                        toReturnInfo.workingWord = null;
                         if (!toReturnInfo.animalsCategory_WordOneSolved) {
-                            toReturnInfo.attempts = 0;
-                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.animalsCategory_WordOneSolved = true;
+                            System.out.println("Animals Category: Word one solved");
                         } else if (!toReturnInfo.animalsCategory_WordTwoSolved) {
-                            toReturnInfo.attempts = 0;
-                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.animalsCategory_WordTwoSolved = true;
+                            System.out.println("Animals Category: Word two solved");
                         } else if (!toReturnInfo.animalsCategory_WordThreeSolved) {
-                            toReturnInfo.attempts = 0;
-                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.animalsCategory_WordThreeSolved = true;
+                            System.out.println("Animals Category: Word three solved");
                         } else {
                             System.out.println("In updateIndexOfLetter animal category: This shouldn't happen");
                         }
                     }
 
-                } else if (toReturnInfo.workingWord != null && receivedInfo.playingFoodCategory) {
+                } else if (receivedInfo.playingFoodCategory) {
                     toReturnInfo = checkLetterClicked("Food", receivedInfo);
 
                     //if the word is solved
-                    if (toReturnInfo.workingWord.length() <= 0) {
+                    if (toReturnInfo.workingWordForLength != null && toReturnInfo.workingWordForLength.length() <= 0) {
+                        toReturnInfo.attempts = 0;
+                        toReturnInfo.guessLeft = 0;
+                        toReturnInfo.workingWordForLength = null;
+                        toReturnInfo.workingWord = null;
                         if (!toReturnInfo.foodCategory_WordOneSolved) {
-                            toReturnInfo.attempts = 0;
-                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.foodCategory_WordOneSolved = true;
+                            System.out.println("Food Category: Word one solved");
                         } else if (!toReturnInfo.foodCategory_WordTwoSolved) {
-                            toReturnInfo.attempts = 0;
-                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.foodCategory_WordTwoSolved = true;
+                            System.out.println("Food Category: Word two solved");
                         } else if (!toReturnInfo.foodCategory_WordThreeSolved) {
-                            toReturnInfo.attempts = 0;
-                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.foodCategory_WordThreeSolved = true;
+                            System.out.println("Food Category: Word three solved");
                         } else {
                             System.out.println("In updateIndexOfLetter food category: This shouldn't happen");
                         }
                     }
 
-                } else if (toReturnInfo.workingWord != null && receivedInfo.playingStatesCategory) {
+                } else if (receivedInfo.playingStatesCategory) {
                     toReturnInfo = checkLetterClicked("States", receivedInfo);
 
                     //if the word is solved
-                    if (toReturnInfo.workingWord.length() <= 0) {
+                    if (toReturnInfo.workingWordForLength != null && toReturnInfo.workingWordForLength.length() <= 0) {
+                        toReturnInfo.attempts = 0;
+                        toReturnInfo.guessLeft = 0;
+                        toReturnInfo.workingWordForLength = null;
+                        toReturnInfo.workingWord = null;
                         if (!toReturnInfo.statesCategory_WordOneSolved) {
-                            toReturnInfo.attempts = 0;
-                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.statesCategory_WordOneSolved = true;
+                            System.out.println("States Category: Word one solved");
                         } else if (!toReturnInfo.statesCategory_WordTwoSolved) {
-                            toReturnInfo.attempts = 0;
-                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.statesCategory_WordTwoSolved = true;
+                            System.out.println("States Category: Word one solved");
                         } else if (!toReturnInfo.statesCategory_WordThreeSolved) {
-                            toReturnInfo.attempts = 0;
-                            toReturnInfo.guessLeft = 0;
                             toReturnInfo.statesCategory_WordThreeSolved = true;
+                            System.out.println("States Category: Word one solved");
                         } else {
                             System.out.println("In updateIndexOfLetter states category: This shouldn't happen");
                         }
@@ -222,11 +225,13 @@ public class Server {
                 receivedInfo.indexOfLetter = index;
                 receivedInfo.selectedLetter = letter;
 
-                if (receivedInfo.workingWord == null) {
+                if (receivedInfo.workingWordForLength == null) {
                     receivedInfo.workingWord = word;
+                    receivedInfo.workingWordForLength = word;
                 }
 
-                receivedInfo.workingWord = receivedInfo.workingWord.replace(letter, "");
+                receivedInfo.workingWord = receivedInfo.workingWord.replaceFirst(letter, "_");
+                receivedInfo.workingWordForLength = receivedInfo.workingWordForLength.replaceFirst(letter, "");
 
                 //checks if working word is solved
                 return receivedInfo;
@@ -335,7 +340,6 @@ public class Server {
 
             public ServerSideGameInfo transferClientToServerGameInfo(ServerSideGameInfo serverSideGameInfo, ClientSideGameInfo clientSideGameInfo) {
                 //returns server side converted gameInfo
-                serverSideGameInfo.selectedLetter = clientSideGameInfo.selectedLetter;
 
                 serverSideGameInfo.playingAnimalsCategory = clientSideGameInfo.playingAnimalsCategory;
                 serverSideGameInfo.animalsCategorySolved = clientSideGameInfo.animalsCategorySolved;
@@ -357,14 +361,14 @@ public class Server {
 
                 serverSideGameInfo.guessLeft = clientSideGameInfo.guessLeft;
                 serverSideGameInfo.indexOfLetter = clientSideGameInfo.indexOfLetter;
+                serverSideGameInfo.attempts = clientSideGameInfo.attempts;
+                serverSideGameInfo.selectedLetter = clientSideGameInfo.selectedLetter;
 
                 return serverSideGameInfo;
             }
 
             public ClientSideGameInfo transferServerToClientGameInfo(ServerSideGameInfo serverSideGameInfo, ClientSideGameInfo clientSideGameInfo) {
                 //returns client side converted gameInfo
-
-                clientSideGameInfo.indexOfLetter = serverSideGameInfo.indexOfLetter;
 
                 clientSideGameInfo.playingAnimalsCategory = serverSideGameInfo.playingAnimalsCategory;
                 clientSideGameInfo.animalsCategorySolved = serverSideGameInfo.animalsCategorySolved;
@@ -385,6 +389,9 @@ public class Server {
                 clientSideGameInfo.statesCategory_WordThreeSolved = serverSideGameInfo.statesCategory_WordThreeSolved;
 
                 clientSideGameInfo.guessLeft = serverSideGameInfo.guessLeft;
+                clientSideGameInfo.indexOfLetter = serverSideGameInfo.indexOfLetter;
+                clientSideGameInfo.attempts = serverSideGameInfo.attempts;
+                clientSideGameInfo.selectedLetter = serverSideGameInfo.selectedLetter;
 
                 return clientSideGameInfo;
             }

@@ -581,8 +581,8 @@ public class WordGuessClient extends Application {
 		}
 
 		if ((gameInfo.animalsCategory_WordOneSolved || gameInfo.animalsCategory_WordTwoSolved || gameInfo.animalsCategory_WordThreeSolved) &&
-			gameInfo.statesCategory_WordOneSolved || gameInfo.statesCategory_WordTwoSolved || gameInfo.statesCategory_WordThreeSolved &&
-			gameInfo.foodCategory_WordOneSolved || gameInfo.foodCategory_WordTwoSolved || gameInfo.foodCategory_WordThreeSolved) {
+				(gameInfo.statesCategory_WordOneSolved || gameInfo.statesCategory_WordTwoSolved || gameInfo.statesCategory_WordThreeSolved) &&
+				(gameInfo.foodCategory_WordOneSolved || gameInfo.foodCategory_WordTwoSolved || gameInfo.foodCategory_WordThreeSolved)) {
 			gameInfo.gameWon = true;
 		}
 
