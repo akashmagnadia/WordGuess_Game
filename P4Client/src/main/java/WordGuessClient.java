@@ -53,6 +53,8 @@ public class WordGuessClient extends Application {
 	
 	Label correctGuessesRemaining;
 	static Label correctGuesses;
+	Label correctAttemptsRemaining;
+	static Label attemptsLeft;
 	
 	static Label category;
 	static MenuButton categories;
@@ -101,7 +103,7 @@ public class WordGuessClient extends Application {
 		
 		/* Initial Scene Configuration */
 		primaryStage.setScene(sceneMap.get("clientStart"));
-//		primaryStage.setScene(sceneMap.get("clientResults"));
+//		primaryStage.setScene(sceneMap.get("clientGameplay"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		
@@ -323,7 +325,7 @@ public class WordGuessClient extends Application {
 		
 		categories.setText("Pick a category");
 		categories.getItems().addAll(animals,food,states);
-		categories.setPrefSize(120, 40);
+		categories.setPrefSize(150, 40);
 		categories.setStyle("-fx-background-color: aqua;");
 		categories.setLayoutX(170);
 		categories.setLayoutY(550);
@@ -361,10 +363,10 @@ public class WordGuessClient extends Application {
 		letterChoices.setText("Guess a letter!");
 		letterChoices.getItems().addAll(letA,letB,letC,letD,letE,letF,letG,letH,letI,
 				letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ);
-		letterChoices.setPrefSize(120, 40);
+		letterChoices.setPrefSize(150, 40);
 		letterChoices.setStyle("-fx-background-color: coral;");
 		letterChoices.setTextFill(Color.WHITE);
-		letterChoices.setLayoutX(300);
+		letterChoices.setLayoutX(330);
 		letterChoices.setLayoutY(550);
 		/* Drop down menu for letter selection */
 
@@ -383,9 +385,28 @@ public class WordGuessClient extends Application {
 		correctGuesses.setTextFill(Color.GOLD);
 
 		VBox guessesBox = new VBox(5,correctGuessesRemaining,correctGuesses);
-		guessesBox.setLayoutX(430);
+		guessesBox.setLayoutX(490);
 		guessesBox.setLayoutY(530);
 		/* Guesses Remaining Labels */
+
+		/* Attempts Remaining Labels */
+		correctAttemptsRemaining = new Label("Attempts Remaining:");
+		attemptsLeft = new Label("3");
+
+		correctAttemptsRemaining.setFont(Font.font("Rockwell",20));
+		correctAttemptsRemaining.setTextFill(Color.GOLD);
+
+		attemptsLeft.setStyle("-fx-border-color: gold;");
+		attemptsLeft.setPrefSize(200, 100);
+		attemptsLeft.setTextAlignment(TextAlignment.CENTER);
+		attemptsLeft.setAlignment(Pos.CENTER);
+		attemptsLeft.setFont(Font.font("Rockwell",64));
+		attemptsLeft.setTextFill(Color.GOLD);
+
+		VBox attemptsBox = new VBox(5,correctAttemptsRemaining, attemptsLeft);
+		attemptsBox.setLayoutX(700);
+		attemptsBox.setLayoutY(530);
+		/* Attempts Remaining Labels */
 		
 		/* Client log */
 		info = FXCollections.observableArrayList();
@@ -394,9 +415,10 @@ public class WordGuessClient extends Application {
 		clientLog.setOpacity(0.8);
 		clientLog.setLayoutX(640);
 		clientLog.setLayoutY(540);
+		clientLog.setVisible(false);
 		/* Client log */
 		
-		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices, guessesBox, clientLog);
+		gameplay.getChildren().addAll(menuBar,letters,category,categories,letterChoices, guessesBox, attemptsBox, clientLog);
 		return new Scene(gameplay, 1000, 800);
 	}
 	
@@ -461,31 +483,35 @@ public class WordGuessClient extends Application {
 		listenForLetter();
 	}
 
-	public static void updateOnChange() {
+	public static void updateOnChange() throws InterruptedException {
 		updateLetterBox();
 		checkEndOfRound();
 
-		Platform.runLater(() ->  correctGuesses.setText(String.valueOf(clientConnection.myPlayerInfo.guessLeft)));
+		Platform.runLater(() -> {
+			correctGuesses.setText(String.valueOf(clientConnection.myPlayerInfo.guessLeft));
+			attemptsLeft.setText(String.valueOf(clientConnection.myPlayerInfo.attempts));
+		});
 	}
 
 	public static void checkWonOrLose(Stage primaryStage, HashMap<String, Scene> sceneMap) {
-		if (clientConnection.myPlayerInfo.gameWon) {
-			Platform.runLater(() -> {
-				category.setText("Game Won");
-				result.setText("You Won the Game!");
-				primaryStage.setScene(sceneMap.get("clientResults"));
-				primaryStage.setResizable(false);
-				primaryStage.show();
-			});
-		} else if (clientConnection.myPlayerInfo.gameLost) {
-			Platform.runLater(() -> {
-				category.setText("Game Lost");
-				result.setText("You Lost the Game!");
-				primaryStage.setScene(sceneMap.get("clientResults"));
-				primaryStage.setResizable(false);
-				primaryStage.show();
-			});
-
+		if (clientConnection != null) {
+			if (clientConnection.myPlayerInfo.gameWon) {
+				Platform.runLater(() -> {
+					category.setText("Game Won");
+					result.setText("You Won the Game!");
+					primaryStage.setScene(sceneMap.get("clientResults"));
+					primaryStage.setResizable(false);
+					primaryStage.show();
+				});
+			} else if (clientConnection.myPlayerInfo.gameLost) {
+				Platform.runLater(() -> {
+					category.setText("Game Lost");
+					result.setText("You Lost the Game!");
+					primaryStage.setScene(sceneMap.get("clientResults"));
+					primaryStage.setResizable(false);
+					primaryStage.show();
+				});
+			}
 		}
 	}
 
@@ -573,10 +599,11 @@ public class WordGuessClient extends Application {
 		}
 	}
 
-	public static void checkEndOfRound() {
+	public static void checkEndOfRound() throws InterruptedException {
 		ClientSideGameInfo gameInfo = clientConnection.myPlayerInfo;
 
 		if (gameInfo.guessLeft == 0) {
+			Thread.sleep(1500);
 			resetForNextRound();
 		}
 

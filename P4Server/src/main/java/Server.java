@@ -112,17 +112,23 @@ public class Server {
                         //transfer client side info to server side and send it off for logic
                         //transferClientToServerGameInfo() returns server side converted gameInfo
 
-                        //after performing the logic
-                        tempThread.serverSideClientInfo = updateIndexOfLetter(transferClientToServerGameInfo(tempThread.serverSideClientInfo, tempThread.clientSideClientInfo));
+                        do {
+                            //loop until the selected letter has been shown to the client in case there are multiple letter in the word
+                            tempThread.serverSideClientInfo = updateIndexOfLetter
+                                    (transferClientToServerGameInfo
+                                            (tempThread.serverSideClientInfo, tempThread.clientSideClientInfo)); //perform logic
 
-                        //returns client side converted gameInfo and sends it back to the client
-                        tempThread.clientSideClientInfo = transferServerToClientGameInfo(tempThread.serverSideClientInfo, tempThread.clientSideClientInfo);
+                            //returns client side converted gameInfo and sends it back to the client
+                            tempThread.clientSideClientInfo = transferServerToClientGameInfo(tempThread.serverSideClientInfo, tempThread.clientSideClientInfo);
 
-                        callBack.accept("Received something from Player " + receivedInfo.clientNumber);
+                            callBack.accept("Received something from Player " + receivedInfo.clientNumber);
 
-                        //return logic performed info to send it back to client
-                        out.writeUnshared(tempThread.clientSideClientInfo); //test with writeUnshared
+                            //return logic performed info to send it back to client
+                            out.writeUnshared(tempThread.clientSideClientInfo); //test with writeUnshared
 //                        out.writeObject(receivedInfo);
+                        }
+                        while (tempThread.serverSideClientInfo.workingWord != null &&
+                                tempThread.serverSideClientInfo.workingWord.contains(tempThread.serverSideClientInfo.selectedLetter));
                     }
                     catch(Exception e) {
                         callBack.accept("OOOOPPs...Something wrong with the socket from client: " + clientCount + "....closing down!");
@@ -206,7 +212,7 @@ public class Server {
                     }
 
                 } else {
-                    System.out.println("This shouldn't happen");
+                    System.out.println("In updateIndexOfLetter: This shouldn't happen");
                 }
                 return toReturnInfo;
 
@@ -218,18 +224,21 @@ public class Server {
             }
 
             public ServerSideGameInfo validGuessChecker(String word, String letter, ServerSideGameInfo receivedInfo) {
-                int index = word.toLowerCase().indexOf(letter);
-                if (index == -1) {
-                    receivedInfo.guessLeft--;
-                }
-                receivedInfo.indexOfLetter = index;
-                receivedInfo.selectedLetter = letter;
-
-                if (receivedInfo.workingWordForLength == null) {
+                int index = -3;
+                if (receivedInfo.workingWord == null) {
                     receivedInfo.workingWord = word;
                     receivedInfo.workingWordForLength = word;
                 }
 
+                index = receivedInfo.workingWord.toLowerCase().indexOf(letter);
+
+                if (index == -1) {
+                    receivedInfo.guessLeft--;
+                }
+
+                receivedInfo.indexOfLetter = index;
+
+                receivedInfo.selectedLetter = letter;
                 receivedInfo.workingWord = receivedInfo.workingWord.replaceFirst(letter, "_");
                 receivedInfo.workingWordForLength = receivedInfo.workingWordForLength.replaceFirst(letter, "");
 
