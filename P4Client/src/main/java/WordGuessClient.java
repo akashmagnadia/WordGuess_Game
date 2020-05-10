@@ -175,10 +175,6 @@ public class WordGuessClient extends Application {
 		clientConnection.start();
 	}
 
-	public void playGame() {
-		clientConnection.send(clientConnection.myPlayerInfo, "Sending Player Info");
-	}
-	
 	/* First scene is where the client is prompted to enter IP and Port # to connect to server and begin game */
 	public Scene createClientGUIStartScreen() {
 		Pane startScreen = new Pane();
@@ -203,6 +199,24 @@ public class WordGuessClient extends Application {
 		welcomeLabels.setLayoutX(40);
 		welcomeLabels.setLayoutY(50);
 		/* Title Label */
+
+		/* Instructions Label */
+		Label instructionsText = new Label("								Instructions:");
+		instructionsText.setFont(Font.font("Rockwell",20));
+		instructionsText.setTextFill(Color.GOLD);
+
+		Label instructionToWin = new Label("		Guess at least one word from each category to win the game");
+		instructionToWin.setFont(Font.font("Rockwell",20));
+		instructionToWin.setTextFill(Color.GOLD);
+
+		Label instructionToLose = new Label("You will lose the game if you don't guess a word in three consecutive attempts");
+		instructionToLose.setFont(Font.font("Rockwell",20));
+		instructionToLose.setTextFill(Color.GOLD);
+
+		VBox instructions = new VBox(10, instructionsText, instructionToWin, instructionToLose);
+		instructions.setLayoutX(150);
+		instructions.setLayoutY(650);
+		/* Instructions Label */
 		
 		/* IP and Port Fields */
 		Label enterIP = new Label("Enter IP Address: ");
@@ -233,7 +247,7 @@ public class WordGuessClient extends Application {
 		connect.setLayoutY(350);
 		/* Connect Button ends */
 		
-		startScreen.getChildren().addAll(welcomeLabels,ipSelection,portSelection,connect);
+		startScreen.getChildren().addAll(welcomeLabels,ipSelection,portSelection,connect, instructions);
 		return new Scene(startScreen, 1000, 770);
 	}
 	
