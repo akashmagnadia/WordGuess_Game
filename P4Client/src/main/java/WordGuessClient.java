@@ -58,9 +58,11 @@ public class WordGuessClient extends Application {
 	static MenuButton categories;
 	MenuItem animals,states,food;
 	
-	MenuButton letterChoices;
+	static MenuButton letterChoices;
 	MenuItem letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ;
-	
+	MenuItem[] lettersMenuItem = {letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ};
+
+	static String[] lettersArray = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 	Image defaultGreenBox = new Image("defaultLetterScreen.png");
 	Image whiteBox = new Image("whiteSpace.png");
 	static ImageView firstBox;
@@ -345,36 +347,22 @@ public class WordGuessClient extends Application {
 		
 		/* Drop down menu for letter selection */
 		letterChoices = new MenuButton();
-		letA = new MenuItem("A");
-		letB = new MenuItem("B");
-		letC = new MenuItem("C");
-		letD = new MenuItem("D");
-		letE = new MenuItem("E");
-		letF = new MenuItem("F");
-		letG = new MenuItem("G");
-		letH = new MenuItem("H");
-		letI = new MenuItem("I");
-		letJ = new MenuItem("J");
-		letK = new MenuItem("K");
-		letL = new MenuItem("L");
-		letM = new MenuItem("M");
-		letN = new MenuItem("N");
-		letO = new MenuItem("O");
-		letP = new MenuItem("P");
-		letQ = new MenuItem("Q");
-		letR = new MenuItem("R");
-		letS = new MenuItem("S");
-		letT = new MenuItem("T");
-		letU = new MenuItem("U");
-		letV = new MenuItem("V");
-		letW = new MenuItem("W");
-		letX = new MenuItem("X");
-		letY = new MenuItem("Y");
-		letZ = new MenuItem("Z");
+		int count = 0;
+		for (MenuItem menuItem: lettersMenuItem) {
+			menuItem = new MenuItem(lettersArray[count].toUpperCase());
+			letterChoices.getItems().add(menuItem);
+
+			int finalCount = count;
+			menuItem.setOnAction(event -> {
+				if (clientConnection != null) {
+					clientConnection.myPlayerInfo.selectedLetter = lettersArray[finalCount];
+					clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter " + lettersArray[finalCount].toUpperCase());
+				}
+			});
+			count++;
+		}
 		
 		letterChoices.setText("Guess a letter!");
-		letterChoices.getItems().addAll(letA,letB,letC,letD,letE,letF,letG,letH,letI,
-				letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ);
 		letterChoices.setPrefSize(150, 40);
 		letterChoices.setStyle("-fx-background-color: coral;");
 		letterChoices.setTextFill(Color.WHITE);
@@ -492,7 +480,6 @@ public class WordGuessClient extends Application {
 
 	public void listenFor() {
 		listenForCategory();
-		listenForLetter();
 	}
 
 	public static void updateOnChange() throws InterruptedException {
@@ -554,6 +541,13 @@ public class WordGuessClient extends Application {
 	}
 
 	public static void updateLetterBoxHelper(ImageView boxToModify) {
+		for (String letter: lettersArray) {
+			if (clientConnection.myPlayerInfo.selectedLetter.equals(letter)) {
+				boxToModify.setImage(new Image("letter" + letter.toUpperCase() + ".png"));
+			}
+		}
+
+		/*
 		if (clientConnection.myPlayerInfo.selectedLetter.equals("a")) {
 			boxToModify.setImage(new Image("letterA.png"));
 		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("b")) {
@@ -609,6 +603,7 @@ public class WordGuessClient extends Application {
 		} else {
 			System.out.println("No letter is selected yet");
 		}
+		 */
 	}
 
 	public static void checkEndOfRound() throws InterruptedException {
@@ -645,6 +640,7 @@ public class WordGuessClient extends Application {
 		tenthBox.setImage(new Image("defaultLetterScreen.png"));
 
 		categories.setDisable(false);
+		letterChoices.setDisable(true);
 
 		Platform.runLater(() -> category.setText("Next Round - Pick a category"));
 
@@ -693,6 +689,7 @@ public class WordGuessClient extends Application {
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on States category");
 
 			categories.setDisable(true);
+			letterChoices.setDisable(false);
 			Platform.runLater(() -> category.setText("States"));
 		});
 
@@ -703,6 +700,7 @@ public class WordGuessClient extends Application {
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Food category");
 
 			categories.setDisable(true);
+			letterChoices.setDisable(false);
 			Platform.runLater(() -> category.setText("Food"));
 		});
 
@@ -713,139 +711,8 @@ public class WordGuessClient extends Application {
 			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Animals category");
 
 			categories.setDisable(true);
+			letterChoices.setDisable(false);
 			Platform.runLater(() -> category.setText("Animals"));
-		});
-	}
-
-	public void listenForLetter() {
-		letA.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "a";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter A");
-		});
-
-		letB.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "b";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter B");
-		});
-
-		letC.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "c";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter C");
-		});
-
-		letD.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "d";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter D");
-		});
-
-		letE.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "e";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter E");
-		});
-
-		letF.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "f";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter F");
-		});
-
-		letG.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "g";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter G");
-		});
-
-		letH.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "h";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter H");
-		});
-
-		letI.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "i";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter I");
-		});
-
-		letJ.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "j";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter J");
-		});
-
-		letK.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "k";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter K");
-		});
-
-		letL.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "l";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter L");
-		});
-
-		letM.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "m";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter M");
-		});
-
-		letN.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "n";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter N");
-		});
-
-		letO.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "o";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter O");
-		});
-
-		letP.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "p";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter P");
-		});
-
-		letQ.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "q";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter Q");
-		});
-
-		letR.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "r";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter R");
-		});
-
-		letS.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "s";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter S");
-		});
-
-		letT.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "t";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter T");
-		});
-
-		letU.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "u";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter U");
-		});
-
-		letV.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "v";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter V");
-		});
-
-		letW.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "w";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter W");
-		});
-
-		letX.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "x";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter X");
-		});
-
-		letY.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "y";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter Y");
-		});
-
-		letZ.setOnAction(event -> {
-			clientConnection.myPlayerInfo.selectedLetter = "z";
-			clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter Z");
 		});
 	}
 }
