@@ -146,7 +146,7 @@ public class Server {
                     toReturnInfo = checkLetterClicked("Animals", receivedInfo);
 
                     //if the word is solved
-                    if (toReturnInfo.workingWordForLength != null && toReturnInfo.workingWordForLength.length() <= 0) {
+                    if (toReturnInfo.workingWordForLength != null && toReturnInfo.workingWordForLength.length() == 0) {
                         toReturnInfo.attempts = 0;
                         toReturnInfo.guessLeft = 0;
                         toReturnInfo.workingWordForLength = null;
@@ -160,6 +160,22 @@ public class Server {
                         } else if (!toReturnInfo.animalsCategory_WordThreeSolved) {
                             toReturnInfo.animalsCategory_WordThreeSolved = true;
                             System.out.println("Animals Category: Word three solved");
+                        } else {
+                            System.out.println("In updateIndexOfLetter animal category: This shouldn't happen");
+                        }
+                    }
+
+                    //if the word is not solved withing 6 guesses
+                    else if (toReturnInfo.guessLeft == 0){
+                        toReturnInfo.attempts++;
+                        toReturnInfo.workingWordForLength = null;
+                        toReturnInfo.workingWord = null;
+                        if (!toReturnInfo.animalsCategory_WordOneSolved) {
+                            System.out.println("Animals Category: Word one not solved");
+                        } else if (!toReturnInfo.animalsCategory_WordTwoSolved) {
+                            System.out.println("Animals Category: Word two not solved");
+                        } else if (!toReturnInfo.animalsCategory_WordThreeSolved) {
+                            System.out.println("Animals Category: Word three not solved");
                         } else {
                             System.out.println("In updateIndexOfLetter animal category: This shouldn't happen");
                         }
@@ -188,6 +204,22 @@ public class Server {
                         }
                     }
 
+                    //if the word is not solved withing 6 guesses
+                    else if (toReturnInfo.guessLeft == 0){
+                        toReturnInfo.attempts++;
+                        toReturnInfo.workingWordForLength = null;
+                        toReturnInfo.workingWord = null;
+                        if (!toReturnInfo.foodCategory_WordOneSolved) {
+                            System.out.println("Food Category: Word one not solved");
+                        } else if (!toReturnInfo.foodCategory_WordTwoSolved) {
+                            System.out.println("Food Category: Word two not solved");
+                        } else if (!toReturnInfo.foodCategory_WordThreeSolved) {
+                            System.out.println("Food Category: Word three not solved");
+                        } else {
+                            System.out.println("In updateIndexOfLetter food category: This shouldn't happen");
+                        }
+                    }
+
                 } else if (receivedInfo.playingStatesCategory) {
                     toReturnInfo = checkLetterClicked("States", receivedInfo);
 
@@ -202,17 +234,36 @@ public class Server {
                             System.out.println("States Category: Word one solved");
                         } else if (!toReturnInfo.statesCategory_WordTwoSolved) {
                             toReturnInfo.statesCategory_WordTwoSolved = true;
-                            System.out.println("States Category: Word one solved");
+                            System.out.println("States Category: Word two solved");
                         } else if (!toReturnInfo.statesCategory_WordThreeSolved) {
                             toReturnInfo.statesCategory_WordThreeSolved = true;
-                            System.out.println("States Category: Word one solved");
+                            System.out.println("States Category: Word three solved");
+                        } else {
+                            System.out.println("In updateIndexOfLetter states category: This shouldn't happen");
+                        }
+                    }
+
+                    //if the word is not solved withing 6 guesses
+                     else if (toReturnInfo.guessLeft == 0){
+                        toReturnInfo.attempts++;
+                        toReturnInfo.workingWordForLength = null;
+                        toReturnInfo.workingWord = null;
+                        if (!toReturnInfo.statesCategory_WordOneSolved) {
+                            toReturnInfo.statesCategory_WordOneSolved = true;
+                            System.out.println("States Category: Word one not solved");
+                        } else if (!toReturnInfo.statesCategory_WordTwoSolved) {
+                            toReturnInfo.statesCategory_WordTwoSolved = true;
+                            System.out.println("States Category: Word two not solved");
+                        } else if (!toReturnInfo.statesCategory_WordThreeSolved) {
+                            toReturnInfo.statesCategory_WordThreeSolved = true;
+                            System.out.println("States Category: Word three not solved");
                         } else {
                             System.out.println("In updateIndexOfLetter states category: This shouldn't happen");
                         }
                     }
 
                 } else {
-                    System.out.println("In updateIndexOfLetter: This shouldn't happen");
+                    System.out.println("In updateIndexOfLetter: Not playing any category");
                 }
                 return toReturnInfo;
 

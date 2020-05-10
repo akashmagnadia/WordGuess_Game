@@ -38,8 +38,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-//Look at GameInfo for all the variables that can be utilized to help make the UI
-
 public class WordGuessClient extends Application {
 
 	HashMap<String, Scene> sceneMap;
@@ -489,7 +487,7 @@ public class WordGuessClient extends Application {
 
 		Platform.runLater(() -> {
 			correctGuesses.setText(String.valueOf(clientConnection.myPlayerInfo.guessLeft));
-			attemptsLeft.setText(String.valueOf(clientConnection.myPlayerInfo.attempts));
+			attemptsLeft.setText(String.valueOf(3-clientConnection.myPlayerInfo.attempts));
 		});
 	}
 
@@ -636,7 +634,6 @@ public class WordGuessClient extends Application {
 
 		Platform.runLater(() -> category.setText("Next Round - Pick a category"));
 
-		clientConnection.myPlayerInfo.attempts++;
 		clientConnection.myPlayerInfo.selectedLetter = "";
 		clientConnection.myPlayerInfo.indexOfLetter = -1;
 
