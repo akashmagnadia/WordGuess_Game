@@ -96,7 +96,7 @@ public class WordGuessClient extends Application {
 		primaryStage.setTitle("(Client) Word Guess!!!");
 //		music();
 		
-		sceneMap = new HashMap<String, Scene>();
+		sceneMap = new HashMap<>();
 		sceneMap.put("clientStart", createClientGUIStartScreen());
 		sceneMap.put("clientGameplay", createClientGUIGameplay());
 		sceneMap.put("clientResults", createResultScene());
@@ -107,13 +107,9 @@ public class WordGuessClient extends Application {
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		
-		unmute.setOnAction(e->{
-			music();
-		});
+		unmute.setOnAction(e-> music());
 		
-		mute.setOnAction(e->{
-			mediaPlayer.stop();
-		});
+		mute.setOnAction(e-> mediaPlayer.stop());
 
 		exit.setOnAction(e->{
 			Platform.exit();
@@ -125,13 +121,9 @@ public class WordGuessClient extends Application {
 			System.exit(0);
 		});
 		
-		playAgain.setOnAction(e->{
-			resetGame(primaryStage, sceneMap);
-		});
+		playAgain.setOnAction(e-> resetGame(primaryStage, sceneMap));
 		
-		newGame.setOnAction(e->{
-			resetGame(primaryStage, sceneMap);
-		});
+		newGame.setOnAction(e-> resetGame(primaryStage, sceneMap));
 
 		connect.setOnAction(e -> {
 			System.out.println("Connecting to server...");
@@ -166,11 +158,7 @@ public class WordGuessClient extends Application {
 		try {
 			port = Integer.parseInt(portInput.getText()); // convert string input to integer
 			ip = IPInput.getText(); // set IP address
-			clientConnection = new Client(data->{
-				Platform.runLater(()->{
-					clientLog.getItems().add(String.valueOf(data));
-				});
-			}, port, ip);
+			clientConnection = new Client(data-> Platform.runLater(()-> clientLog.getItems().add(String.valueOf(data))), port, ip);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -410,7 +398,7 @@ public class WordGuessClient extends Application {
 		
 		/* Client log */
 		info = FXCollections.observableArrayList();
-		clientLog = new ListView<String>(info);
+		clientLog = new ListView<>(info);
 		clientLog.setPrefSize(325, 120);
 		clientLog.setOpacity(0.8);
 		clientLog.setLayoutX(640);

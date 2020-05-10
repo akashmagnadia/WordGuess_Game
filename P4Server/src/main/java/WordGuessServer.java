@@ -51,7 +51,7 @@ public class WordGuessServer extends Application {
 		primaryStage.setTitle("(server) Playing word guess!!!");
 
 		/* Add all scenes to sceneMap for use later */
-		sceneMap = new HashMap<String, Scene>();
+		sceneMap = new HashMap<>();
 		sceneMap.put("serverStart", createServerGUIStartScreen());
 		sceneMap.put("serverGameplay", createServerGUIGameplay());
 		
@@ -70,12 +70,9 @@ public class WordGuessServer extends Application {
 		});
 		
 		/* Allow the program to fully close upon exiting, allows current port to be freed up */
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent t) {
-				Platform.exit();
-				System.exit(0);
-			}
+		primaryStage.setOnCloseRequest(t -> {
+			Platform.exit();
+			System.exit(0);
 		});
 	}
 
@@ -157,17 +154,16 @@ public class WordGuessServer extends Application {
 		
 		/* Speech bubble detail */
 		Polygon triangle = new Polygon();
-		triangle.getPoints().addAll(new Double[]{
-	            300.0, 185.0,
-	            400.0, 115.0,
-	            400.0, 365.0 });
+		triangle.getPoints().addAll(300.0, 185.0,
+				400.0, 115.0,
+				400.0, 365.0);
 		triangle.setFill(Color.WHITE);
 		triangle.setStyle("-fx-border-color: white;");
 		/* Speech bubble detail */
 		
 		/* Game Info */
 		info = FXCollections.observableArrayList();
-		serverLog = new ListView<String>(info);
+		serverLog = new ListView<>(info);
 		serverLog.setPrefSize(400, 250);
 		serverLog.setOpacity(1.0);
 		serverLog.setLayoutX(400);
