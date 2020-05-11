@@ -2,6 +2,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import java.io.Serializable;
+import java.net.UnknownHostException;
 import java.util.function.Consumer;
 
 class GuessTest {
@@ -14,7 +15,7 @@ class GuessTest {
 	}
 
 	@BeforeEach
-	void init() {
+	void init() throws UnknownHostException {
 		a = new Client(callBack, 5555, "127.0.0.1");
 	}
 

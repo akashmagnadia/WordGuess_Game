@@ -40,11 +40,6 @@ public class Server {
                     c.start();
 
                     clientCount++;
-
-//                    MorraInfo info = new MorraInfo();
-//                    //when new client is made MorraInfo object is sent with client number
-//                    info.client = clientCount;
-//                    out.writeObject(info);
                 }
 
             } //end of try
@@ -106,8 +101,16 @@ public class Server {
                         ClientSideGameInfo receivedInfo = (ClientSideGameInfo) in.readObject();
 
                         //update player info in client thread array
-                        ClientThread tempThread = clients.get(receivedInfo.clientNumber - 1);
-                        tempThread.clientSideClientInfo = receivedInfo;
+                        ClientThread tempThread = null;
+                        for (ClientThread thread: clients) {
+                            if (thread.clientSideClientInfo.clientNumber == receivedInfo.clientNumber) {
+                                tempThread = thread;
+                                tempThread.clientSideClientInfo = receivedInfo;
+                            }
+                        }
+
+//                        ClientThread tempThread = clients.get(receivedInfo.clientNumber - 1);
+//                        tempThread.clientSideClientInfo = receivedInfo;
 
                         //transfer client side info to server side and send it off for logic
                         //transferClientToServerGameInfo() returns server side converted gameInfo

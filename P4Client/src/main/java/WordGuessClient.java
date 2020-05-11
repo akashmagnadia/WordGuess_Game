@@ -356,6 +356,7 @@ public class WordGuessClient extends Application {
 		letterChoices.setTextFill(Color.WHITE);
 		letterChoices.setLayoutX(330);
 		letterChoices.setLayoutY(550);
+		letterChoices.setDisable(true);
 		/* Drop down menu for letter selection */
 
 		/* Guesses Remaining Labels */
