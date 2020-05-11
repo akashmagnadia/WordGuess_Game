@@ -55,7 +55,7 @@ public class ServerSideGameInfo implements Serializable {
     //when the word length is zero then word is solved
     String workingWord = null;
     String workingWordForLength = null;
-    String solvingWord = null;
+    int lengthOfWorkingWordForLength = -1;
 
     Boolean gameWon = false;
     Boolean gameLost = false;

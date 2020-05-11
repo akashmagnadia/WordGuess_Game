@@ -134,7 +134,7 @@ public class Server {
                                 tempThread.serverSideClientInfo.workingWord.contains(tempThread.serverSideClientInfo.selectedLetter));
                     }
                     catch(Exception e) {
-                        callBack.accept("OOOOPPs...Something wrong with the socket from client: " + clientCount + "....closing down!");
+                        callBack.accept(this.clientSideClientInfo.clientNumber + "....closing down!");
                         clients.remove(this);
                         break;
                     }
@@ -278,15 +278,15 @@ public class Server {
             }
 
             public ServerSideGameInfo validGuessChecker(String word, String letter, ServerSideGameInfo receivedInfo) {
-                int index = -3;
                 if (receivedInfo.workingWord == null) {
                     receivedInfo.workingWord = word;
                     receivedInfo.workingWordForLength = word;
+                    receivedInfo.lengthOfWorkingWordForLength = word.length();
                 }
 
-                index = receivedInfo.workingWord.toLowerCase().indexOf(letter);
+                int index = receivedInfo.workingWord.toLowerCase().indexOf(letter);
 
-                if (index == -1) {
+                if (index == -1 && !letter.equals("1")) {
                     receivedInfo.guessLeft--;
                 }
 
@@ -343,61 +343,62 @@ public class Server {
             }
 
             public ServerSideGameInfo checkLetterClicked(String category, ServerSideGameInfo receivedInfo) {
-                if (receivedInfo.selectedLetter.equals("a")) {
-                    return checkLetterClickedHelper(category, "a", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("b")) {
-                    return checkLetterClickedHelper(category, "b", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("c")) {
-                    return checkLetterClickedHelper(category, "c", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("d")) {
-                    return checkLetterClickedHelper(category, "d", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("e")) {
-                    return checkLetterClickedHelper(category, "e", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("f")) {
-                    return checkLetterClickedHelper(category, "f", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("g")) {
-                    return checkLetterClickedHelper(category, "g", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("h")) {
-                    return checkLetterClickedHelper(category, "h", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("i")) {
-                    return checkLetterClickedHelper(category, "i", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("j")) {
-                    return checkLetterClickedHelper(category, "j", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("k")) {
-                    return checkLetterClickedHelper(category, "k", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("l")) {
-                    return checkLetterClickedHelper(category, "l", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("m")) {
-                    return checkLetterClickedHelper(category, "m", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("n")) {
-                    return checkLetterClickedHelper(category, "n", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("o")) {
-                    return checkLetterClickedHelper(category, "o", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("p")) {
-                    return checkLetterClickedHelper(category, "p", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("q")) {
-                    return checkLetterClickedHelper(category, "q", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("r")) {
-                    return checkLetterClickedHelper(category, "r", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("s")) {
-                    return checkLetterClickedHelper(category, "s", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("t")) {
-                    return checkLetterClickedHelper(category, "t", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("u")) {
-                    return checkLetterClickedHelper(category, "u", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("v")) {
-                    return checkLetterClickedHelper(category, "v", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("w")) {
-                    return checkLetterClickedHelper(category, "w", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("x")) {
-                    return checkLetterClickedHelper(category, "x", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("y")) {
-                    return checkLetterClickedHelper(category, "y", receivedInfo);
-                } else if (receivedInfo.selectedLetter.equals("z")) {
-                    return checkLetterClickedHelper(category, "z", receivedInfo);
-                } else {
-                    System.out.println("In check letter Clicked: No letter is clicked.");
-                    return receivedInfo;
+                switch (receivedInfo.selectedLetter) {
+                    case "a":
+                        return checkLetterClickedHelper(category, "a", receivedInfo);
+                    case "b":
+                        return checkLetterClickedHelper(category, "b", receivedInfo);
+                    case "c":
+                        return checkLetterClickedHelper(category, "c", receivedInfo);
+                    case "d":
+                        return checkLetterClickedHelper(category, "d", receivedInfo);
+                    case "e":
+                        return checkLetterClickedHelper(category, "e", receivedInfo);
+                    case "f":
+                        return checkLetterClickedHelper(category, "f", receivedInfo);
+                    case "g":
+                        return checkLetterClickedHelper(category, "g", receivedInfo);
+                    case "h":
+                        return checkLetterClickedHelper(category, "h", receivedInfo);
+                    case "i":
+                        return checkLetterClickedHelper(category, "i", receivedInfo);
+                    case "j":
+                        return checkLetterClickedHelper(category, "j", receivedInfo);
+                    case "k":
+                        return checkLetterClickedHelper(category, "k", receivedInfo);
+                    case "l":
+                        return checkLetterClickedHelper(category, "l", receivedInfo);
+                    case "m":
+                        return checkLetterClickedHelper(category, "m", receivedInfo);
+                    case "n":
+                        return checkLetterClickedHelper(category, "n", receivedInfo);
+                    case "o":
+                        return checkLetterClickedHelper(category, "o", receivedInfo);
+                    case "p":
+                        return checkLetterClickedHelper(category, "p", receivedInfo);
+                    case "q":
+                        return checkLetterClickedHelper(category, "q", receivedInfo);
+                    case "r":
+                        return checkLetterClickedHelper(category, "r", receivedInfo);
+                    case "s":
+                        return checkLetterClickedHelper(category, "s", receivedInfo);
+                    case "t":
+                        return checkLetterClickedHelper(category, "t", receivedInfo);
+                    case "u":
+                        return checkLetterClickedHelper(category, "u", receivedInfo);
+                    case "v":
+                        return checkLetterClickedHelper(category, "v", receivedInfo);
+                    case "w":
+                        return checkLetterClickedHelper(category, "w", receivedInfo);
+                    case "x":
+                        return checkLetterClickedHelper(category, "x", receivedInfo);
+                    case "y":
+                        return checkLetterClickedHelper(category, "y", receivedInfo);
+                    case "z":
+                        return checkLetterClickedHelper(category, "z", receivedInfo);
+                    default:
+                        System.out.println("In check letter Clicked: No letter is clicked.");
+                        return checkLetterClickedHelper(category, "1", receivedInfo); //used to update white boxes in client
                 }
             }
 
@@ -426,6 +427,7 @@ public class Server {
                 serverSideGameInfo.indexOfLetter = clientSideGameInfo.indexOfLetter;
                 serverSideGameInfo.attempts = clientSideGameInfo.attempts;
                 serverSideGameInfo.selectedLetter = clientSideGameInfo.selectedLetter;
+                serverSideGameInfo.lengthOfWorkingWordForLength = clientSideGameInfo.lengthOfWorkingWordForLength;
 
                 return serverSideGameInfo;
             }
@@ -455,6 +457,7 @@ public class Server {
                 clientSideGameInfo.indexOfLetter = serverSideGameInfo.indexOfLetter;
                 clientSideGameInfo.attempts = serverSideGameInfo.attempts;
                 clientSideGameInfo.selectedLetter = serverSideGameInfo.selectedLetter;
+                clientSideGameInfo.lengthOfWorkingWordForLength = serverSideGameInfo.lengthOfWorkingWordForLength;
 
                 return clientSideGameInfo;
             }

@@ -64,7 +64,6 @@ public class WordGuessClient extends Application {
 
 	static String[] lettersArray = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 	Image defaultGreenBox = new Image("defaultLetterScreen.png");
-	Image whiteBox = new Image("whiteSpace.png");
 	static ImageView firstBox;
 	static ImageView secondBox;
 	static ImageView thirdBox;
@@ -474,11 +473,53 @@ public class WordGuessClient extends Application {
 	public static void updateOnChange() throws InterruptedException {
 		updateLetterBox();
 		checkEndOfRound();
+		updateWhiteLetterBoxForLength();
 
 		Platform.runLater(() -> {
 			correctGuesses.setText(String.valueOf(clientConnection.myPlayerInfo.guessLeft));
 			attemptsLeft.setText(String.valueOf(3-clientConnection.myPlayerInfo.attempts));
 		});
+	}
+
+	public static void updateWhiteLetterBoxForLength() {
+		int length = clientConnection.myPlayerInfo.lengthOfWorkingWordForLength;
+
+		if (length != -1) {
+			Image whiteBox = new Image("whiteSpace.png");
+			if (1 <= length) {
+				firstBox.setImage(whiteBox);
+			}
+			if (2 <= length) {
+				secondBox.setImage(whiteBox);
+			}
+			if (3 <= length) {
+				thirdBox.setImage(whiteBox);
+			}
+			if (4 <= length) {
+				fourthBox.setImage(whiteBox);
+			}
+			if (5 <= length) {
+				fifthBox.setImage(whiteBox);
+			}
+			if (6 <= length) {
+				sixthBox.setImage(whiteBox);
+			}
+			if (7 <= length) {
+				seventhBox.setImage(whiteBox);
+			}
+			if (8 <= length) {
+				eighthBox.setImage(whiteBox);
+			}
+			if (9 <= length) {
+				ninthBox.setImage(whiteBox);
+			}
+			if (10 <= length) {
+				tenthBox.setImage(whiteBox);
+			}
+
+			//so that white boxes are not set again until next round
+			clientConnection.myPlayerInfo.lengthOfWorkingWordForLength = -1;
+		}
 	}
 
 	public static void checkWonOrLose(Stage primaryStage, HashMap<String, Scene> sceneMap) {
