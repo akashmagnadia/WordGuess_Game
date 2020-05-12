@@ -27,8 +27,6 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.util.HashMap;
 
-//Look at GameInfo for all the variables that can be utilized to help make the UI
-
 public class WordGuessServer extends Application {
 
 	Button powerOn;
@@ -44,7 +42,6 @@ public class WordGuessServer extends Application {
 		launch(args);
 	}
 
-	//feel free to remove the starter code from this method
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
