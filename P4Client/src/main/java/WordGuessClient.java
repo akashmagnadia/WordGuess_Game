@@ -700,8 +700,11 @@ public class WordGuessClient extends Application {
 		
 		categories.setDisable(false);
 		category.setText("Pick a Category!");
-		
+
+		int tempClientNumber = clientConnection.myPlayerInfo.clientNumber;
+
 		clientConnection.myPlayerInfo = new ClientSideGameInfo();
+		clientConnection.myPlayerInfo.clientNumber = tempClientNumber;
 		
 		clientLog.getItems().clear();
 		clientConnection.send(clientConnection.myPlayerInfo, "New Game Has Started!");

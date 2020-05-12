@@ -252,13 +252,10 @@ public class Server {
                         toReturnInfo.workingWordForLength = null;
                         toReturnInfo.workingWord = null;
                         if (!toReturnInfo.statesCategory_WordOneSolved) {
-                            toReturnInfo.statesCategory_WordOneSolved = true;
                             System.out.println("States Category: Word one not solved");
                         } else if (!toReturnInfo.statesCategory_WordTwoSolved) {
-                            toReturnInfo.statesCategory_WordTwoSolved = true;
                             System.out.println("States Category: Word two not solved");
                         } else if (!toReturnInfo.statesCategory_WordThreeSolved) {
-                            toReturnInfo.statesCategory_WordThreeSolved = true;
                             System.out.println("States Category: Word three not solved");
                         } else {
                             System.out.println("In updateIndexOfLetter states category: This shouldn't happen");
