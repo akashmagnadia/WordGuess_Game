@@ -106,6 +106,20 @@ public class Server {
                             if (thread.clientSideClientInfo.clientNumber == receivedInfo.clientNumber) {
                                 tempThread = thread;
                                 tempThread.clientSideClientInfo = receivedInfo;
+
+                                if (tempThread.clientSideClientInfo.newGame) {
+                                    tempThread.clientSideClientInfo.newGame = false;
+                                    tempThread.serverSideClientInfo.newGame = false;
+
+                                    tempThread.serverSideClientInfo.workingWord = null;
+                                    tempThread.serverSideClientInfo.lengthOfWorkingWordForLength = -1;
+                                    tempThread.clientSideClientInfo.lengthOfWorkingWordForLength = -1;
+
+                                    callBack.accept("Reset the Game for player " + receivedInfo.clientNumber);
+
+                                    //return logic performed info to send it back to client
+                                    out.writeUnshared(tempThread.clientSideClientInfo); //test with writeUnshared
+                                }
                             }
                         }
 

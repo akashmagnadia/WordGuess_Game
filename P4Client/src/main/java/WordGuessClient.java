@@ -102,7 +102,7 @@ public class WordGuessClient extends Application {
 		
 		/* Initial Scene Configuration */
 		primaryStage.setScene(sceneMap.get("clientStart"));
-//		primaryStage.setScene(sceneMap.get("clientGameplay"));
+		primaryStage.setScene(sceneMap.get("clientResults"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		
@@ -423,7 +423,7 @@ public class WordGuessClient extends Application {
 		/* Result label */
 		result = new Label();
 		result.setStyle("-fx-border-color: gold;");
-		result.setPrefSize(440,250);
+		result.setPrefSize(650,100);
 		result.setTextAlignment(TextAlignment.CENTER);
 		result.setAlignment(Pos.CENTER);
 		result.setFont(Font.font("Rockwell",64));
@@ -435,25 +435,21 @@ public class WordGuessClient extends Application {
 		playAgain.setStyle("-fx-background-color: purple;" + "-fx-font: 25 Rockwell;");
 		playAgain.setTextFill(Color.WHITE);
 		playAgain.setEffect(shadow);
-		playAgain.setPrefSize(200, 50);
-		playAgain.setLayoutX(100);
-		playAgain.setLayoutY(350);
+		playAgain.setPrefSize(305, 50);
 		
 		quit = new Button("Quit");
 		quit.setStyle("-fx-background-color: purple;" + "-fx-font: 25 Rockwell;");
 		quit.setTextFill(Color.WHITE);
 		quit.setEffect(shadow);
-		quit.setPrefSize(200, 50);
-		quit.setLayoutX(100);
-		quit.setLayoutY(350);
+		quit.setPrefSize(305, 50);
 		
 		HBox resultButtons = new HBox(40,playAgain,quit);
 		/* Play Again and Quit Buttons */
 		
 		VBox resultScreen = new VBox(20,result,resultButtons);
-		resultScreen.setLayoutX(30);
-		resultScreen.setLayoutY(20);
-		
+		resultScreen.setLayoutX(200);
+		resultScreen.setLayoutY(200);
+
 		results.getChildren().addAll(resultScreen);
 		return new Scene(results, 1000,600);
 	}
@@ -705,6 +701,7 @@ public class WordGuessClient extends Application {
 
 		clientConnection.myPlayerInfo = new ClientSideGameInfo();
 		clientConnection.myPlayerInfo.clientNumber = tempClientNumber;
+		clientConnection.myPlayerInfo.newGame = true;
 		
 		clientLog.getItems().clear();
 		clientConnection.send(clientConnection.myPlayerInfo, "New Game Has Started!");

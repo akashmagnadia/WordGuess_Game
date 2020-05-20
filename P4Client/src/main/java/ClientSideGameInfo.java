@@ -33,6 +33,7 @@ public class ClientSideGameInfo implements Serializable {
 
     Boolean gameWon = false;
     Boolean gameLost = false;
+    Boolean newGame = false;
 
     int attempts = 0;
 }
