@@ -56,11 +56,13 @@ public class WordGuessClient extends Application {
 	
 	static Label category;
 	static MenuButton categories;
-	MenuItem animals,states,food;
+	static MenuItem animals;
+	static MenuItem states;
+	static MenuItem food;
 	
 	static MenuButton letterChoices;
-	MenuItem letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ;
-	MenuItem[] lettersMenuItem = {letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ};
+	static MenuItem letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ;
+	static MenuItem[] lettersMenuItem = {letA,letB,letC,letD,letE,letF,letG,letH,letI,letJ,letK,letL,letM,letN,letO,letP,letQ,letR,letS,letT,letU,letV,letW,letX,letY,letZ};
 
 	static String[] lettersArray = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 	Image defaultGreenBox = new Image("defaultLetterScreen.png");
@@ -102,7 +104,7 @@ public class WordGuessClient extends Application {
 		
 		/* Initial Scene Configuration */
 		primaryStage.setScene(sceneMap.get("clientStart"));
-		primaryStage.setScene(sceneMap.get("clientResults"));
+//		primaryStage.setScene(sceneMap.get("clientResults"));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		
@@ -340,10 +342,12 @@ public class WordGuessClient extends Application {
 			letterChoices.getItems().add(menuItem);
 
 			int finalCount = count;
+			MenuItem finalMenuItem = menuItem;
 			menuItem.setOnAction(event -> {
 				if (clientConnection != null) {
 					clientConnection.myPlayerInfo.selectedLetter = lettersArray[finalCount];
 					clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter " + lettersArray[finalCount].toUpperCase());
+					finalMenuItem.setDisable(true);
 				}
 			});
 			count++;
@@ -470,11 +474,28 @@ public class WordGuessClient extends Application {
 		updateLetterBox();
 		checkEndOfRound();
 		updateWhiteLetterBoxForLength();
+		disableCategoryOnCompletion();
 
 		Platform.runLater(() -> {
 			correctGuesses.setText(String.valueOf(clientConnection.myPlayerInfo.guessLeft));
 			attemptsLeft.setText(String.valueOf(3-clientConnection.myPlayerInfo.attempts));
 		});
+	}
+
+	private static void disableCategoryOnCompletion() {
+		if (clientConnection.myPlayerInfo.animalsCategory_WordThreeSolved) {
+			animals.setDisable(true);
+		} else if (clientConnection.myPlayerInfo.foodCategory_WordThreeSolved) {
+			food.setDisable(true);
+		} else if (clientConnection.myPlayerInfo.statesCategory_WordThreeSolved) {
+			states.setDisable(true);
+		}
+	}
+
+	public void enableAllCategories() {
+		animals.setDisable(false);
+		food.setDisable(false);
+		states.setDisable(false);
 	}
 
 	public static void updateWhiteLetterBoxForLength() {
@@ -572,64 +593,6 @@ public class WordGuessClient extends Application {
 				boxToModify.setImage(new Image("letter" + letter.toUpperCase() + ".png"));
 			}
 		}
-
-		/*
-		if (clientConnection.myPlayerInfo.selectedLetter.equals("a")) {
-			boxToModify.setImage(new Image("letterA.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("b")) {
-			boxToModify.setImage(new Image("letterB.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("c")) {
-			boxToModify.setImage(new Image("letterC.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("d")) {
-			boxToModify.setImage(new Image("letterD.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("e")) {
-			boxToModify.setImage(new Image("letterE.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("f")) {
-			boxToModify.setImage(new Image("letterF.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("g")) {
-			boxToModify.setImage(new Image("letterG.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("h")) {
-			boxToModify.setImage(new Image("letterH.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("i")) {
-			boxToModify.setImage(new Image("letterI.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("j")) {
-			boxToModify.setImage(new Image("letterJ.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("k")) {
-			boxToModify.setImage(new Image("letterK.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("l")) {
-			boxToModify.setImage(new Image("letterL.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("m")) {
-			boxToModify.setImage(new Image("letterM.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("n")) {
-			boxToModify.setImage(new Image("letterN.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("o")) {
-			boxToModify.setImage(new Image("letterO.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("p")) {
-			boxToModify.setImage(new Image("letterP.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("q")) {
-			boxToModify.setImage(new Image("letterQ.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("r")) {
-			boxToModify.setImage(new Image("letterR.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("s")) {
-			boxToModify.setImage(new Image("letterS.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("t")) {
-			boxToModify.setImage(new Image("letterT.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("u")) {
-			boxToModify.setImage(new Image("letterU.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("v")) {
-			boxToModify.setImage(new Image("letterV.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("w")) {
-			boxToModify.setImage(new Image("letterW.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("x")) {
-			boxToModify.setImage(new Image("letterX.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("y")) {
-			boxToModify.setImage(new Image("letterY.png"));
-		} else if (clientConnection.myPlayerInfo.selectedLetter.equals("z")) {
-			boxToModify.setImage(new Image("letterZ.png"));
-		} else {
-			System.out.println("No letter is selected yet");
-		}
-		 */
 	}
 
 	public static void checkEndOfRound() throws InterruptedException {
@@ -677,12 +640,31 @@ public class WordGuessClient extends Application {
 		clientConnection.myPlayerInfo.playingFoodCategory = false;
 		clientConnection.myPlayerInfo.playingAnimalsCategory = false;
 
+		letterChoices.getItems().clear();
+
+		int count = 0;
+		for (MenuItem menuItem: lettersMenuItem) {
+			menuItem = new MenuItem(lettersArray[count].toUpperCase());
+			letterChoices.getItems().add(menuItem);
+
+			int finalCount = count;
+			MenuItem finalMenuItem = menuItem;
+			menuItem.setOnAction(event -> {
+				if (clientConnection != null) {
+					clientConnection.myPlayerInfo.selectedLetter = lettersArray[finalCount];
+					clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter " + lettersArray[finalCount].toUpperCase());
+					finalMenuItem.setDisable(true);
+				}
+			});
+			count++;
+		}
+
 		clientConnection.myPlayerInfo.guessLeft = 6;
 
 		clientConnection.send(clientConnection.myPlayerInfo, "Next Round - Pick a category");
 	}
 	
-	private static void resetGame(Stage primaryStage, HashMap<String, Scene> sceneMap) {
+	private void resetGame(Stage primaryStage, HashMap<String, Scene> sceneMap) {
 		firstBox.setImage(new Image("defaultLetterScreen.png"));
 		secondBox.setImage(new Image("defaultLetterScreen.png"));
 		thirdBox.setImage(new Image("defaultLetterScreen.png"));
@@ -702,9 +684,11 @@ public class WordGuessClient extends Application {
 		clientConnection.myPlayerInfo = new ClientSideGameInfo();
 		clientConnection.myPlayerInfo.clientNumber = tempClientNumber;
 		clientConnection.myPlayerInfo.newGame = true;
-		
+
 		clientLog.getItems().clear();
 		clientConnection.send(clientConnection.myPlayerInfo, "New Game Has Started!");
+
+		enableAllCategories();
 
 		primaryStage.setScene(sceneMap.get("clientGameplay"));
 		primaryStage.setResizable(false);
