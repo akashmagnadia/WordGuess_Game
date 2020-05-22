@@ -23,9 +23,9 @@ If the client is able to guess at least one word from each category, the client 
 **How to install this game on your computer** 
 <br/>
 Download the file for the
-<a target="blank" href = "https://github.com/akashmagnadia/WordGuess_Game/blob/master/out/artifacts/ServerWordGuessSpring2020_jar/ServerWordGuessSpring2020.jar"> server </a>
+<a target="_blank" href = "https://github.com/akashmagnadia/WordGuess_Game/blob/master/out/artifacts/ServerWordGuessSpring2020_jar/ServerWordGuessSpring2020.jar"> server </a>
 and the
-<a target="blank" href = "https://github.com/akashmagnadia/WordGuess_Game/blob/master/out/artifacts/ClientWordGuessSpring2020_jar/ClientWordGuessSpring2020.jar"> client</a>.
+<a target="_blank" href = "https://github.com/akashmagnadia/WordGuess_Game/blob/master/out/artifacts/ClientWordGuessSpring2020_jar/ClientWordGuessSpring2020.jar"> client</a>.
 
 **Instructions to launch and get started with the game**
 <br/>
