@@ -641,7 +641,6 @@ public class WordGuessClient extends Application {
 		clientConnection.myPlayerInfo.playingAnimalsCategory = false;
 
 		letterChoices.getItems().clear();
-
 		int count = 0;
 		for (MenuItem menuItem: lettersMenuItem) {
 			menuItem = new MenuItem(lettersArray[count].toUpperCase());
@@ -678,6 +677,24 @@ public class WordGuessClient extends Application {
 		
 		categories.setDisable(false);
 		category.setText("Pick a Category!");
+
+		letterChoices.getItems().clear();
+		int count = 0;
+		for (MenuItem menuItem: lettersMenuItem) {
+			menuItem = new MenuItem(lettersArray[count].toUpperCase());
+			letterChoices.getItems().add(menuItem);
+
+			int finalCount = count;
+			MenuItem finalMenuItem = menuItem;
+			menuItem.setOnAction(event -> {
+				if (clientConnection != null) {
+					clientConnection.myPlayerInfo.selectedLetter = lettersArray[finalCount];
+					clientConnection.send(clientConnection.myPlayerInfo, "Clicked on Letter " + lettersArray[finalCount].toUpperCase());
+					finalMenuItem.setDisable(true);
+				}
+			});
+			count++;
+		}
 
 		int tempClientNumber = clientConnection.myPlayerInfo.clientNumber;
 
