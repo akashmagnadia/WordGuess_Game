@@ -20,13 +20,15 @@ The client must guess the correct word before the six guesses run out.
 If the client loses three rounds consecutively, the client loses the game.
 If the client is able to guess at least one word from each category, the client wins the game.
 
-**How to install this game on your computer** 
+**How to install this program on your computer** 
 <br/>
 Download the file for the
-<a href = "https://github.com/akashmagnadia/WordGuess_Game/blob/master/out/artifacts/ServerWordGuessSpring2020_jar/ServerWordGuessSpring2020.jar" target="_blank"> server </a>
+<a href = "https://github.com/akashmagnadia/WordGuess_Game/blob/master/out/artifacts/ServerWordGuessSpring2020_jar/ServerWordGuessSpring2020.jar"> server </a>
 and the
-<a href = "https://github.com/akashmagnadia/WordGuess_Game/blob/master/out/artifacts/ClientWordGuessSpring2020_jar/ClientWordGuessSpring2020.jar" target="_blank"> client</a>.
+<a href = "https://github.com/akashmagnadia/WordGuess_Game/blob/master/out/artifacts/ClientWordGuessSpring2020_jar/ClientWordGuessSpring2020.jar"> client</a> 
+by opening them in the new tab.
 
-**Instructions to launch and get started with the game**
+**Instructions to launch and getting started with the game**
 <br/>
- 
+Download Java at https://www.java.com/en/
+Then run the server and client jar file you downloaded above.
