@@ -1,10 +1,23 @@
+import datamuse.connection.DatamuseCaller;
+import datamuse.data.DatamuseWord;
+import datamuse.query.DatamuseQuery;
+
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 public class ServerSideGameInfo implements Serializable {
     int clientNumber = -1;
     String animalsCategory = "Animals";
     String foodCategory = "Food";
     String statesCategory = "States";
+
+    DatamuseCaller caller = new DatamuseCaller();
+    DatamuseQuery query = (new DatamuseQuery())
+            .relatedAdjectiveFor("water")
+            .withinTopicHint("ocean","temperature")
+            .startingWith("s");
+    List<DatamuseWord> words = caller.call(query);
 
     //as the user guesses the word, the char array will be filled with the letters
     String animalsCategory_WordOne = "cheetah".toLowerCase();
@@ -62,4 +75,7 @@ public class ServerSideGameInfo implements Serializable {
     Boolean newGame = false;
 
     int attempts = 0;
+
+    public ServerSideGameInfo() throws IOException {
+    }
 }

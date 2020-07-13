@@ -68,7 +68,7 @@ public class Server {
             }
 
             //TODO: Needs rework for play again or quit button
-            public void cleanClientsInfo() {
+            public void cleanClientsInfo() throws IOException {
                 for(int i = 0; i < clients.size(); i++) {
                     ClientThread thread = clients.get(i);
 
