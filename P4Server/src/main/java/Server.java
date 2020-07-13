@@ -304,6 +304,11 @@ public class Server {
                 receivedInfo.indexOfLetter = index;
 
                 receivedInfo.selectedLetter = letter;
+                if (receivedInfo.workingWord.contains(" ")) {
+                    receivedInfo.workingWord = receivedInfo.workingWord.replaceFirst(" ", "_");
+                    receivedInfo.workingWordForLength = receivedInfo.workingWordForLength.replaceFirst(" ", "");
+                }
+
                 receivedInfo.workingWord = receivedInfo.workingWord.replaceFirst(letter, "_");
                 receivedInfo.workingWordForLength = receivedInfo.workingWordForLength.replaceFirst(letter, "");
 

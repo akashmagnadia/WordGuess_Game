@@ -21,11 +21,11 @@ public class ServerSideGameInfo implements Serializable {
     String foodCategory_WordThree = "pizza".toLowerCase();
     char[] foodCategory_WordThreeArray = new char[foodCategory_WordThree.length()];
 
-    String statesCategory_WordOne = "illinois".toLowerCase();
+    String statesCategory_WordOne = "i llinois".toLowerCase();
     char[] statesCategory_WordOneArray = new char[statesCategory_WordOne.length()];
-    String statesCategory_WordTwo = "florida".toLowerCase();
+    String statesCategory_WordTwo = "f lorida".toLowerCase();
     char[] statesCategory_WordTwoArray = new char[statesCategory_WordTwo.length()];
-    String statesCategory_WordThree = "wisconsin".toLowerCase();
+    String statesCategory_WordThree = "w isconsin".toLowerCase();
     char[] statesCategory_WordThreeArray = new char[statesCategory_WordThree.length()];
 
     Boolean playingAnimalsCategory = false;
