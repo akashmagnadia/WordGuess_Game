@@ -1,11 +1,7 @@
-import datamuse.connection.DatamuseCaller;
-import datamuse.data.DatamuseWord;
-import datamuse.query.DatamuseQuery;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Random;
 
 public class ServerSideGameInfo implements Serializable {
     int clientNumber = -1;
@@ -69,63 +65,66 @@ public class ServerSideGameInfo implements Serializable {
 
     int attempts = 0;
 
-    public ServerSideGameInfo() throws IOException {
+    public ServerSideGameInfo() throws IOException, ParseException {
         //credit to https://github.com/twinters/datamuse-java for implementation of datamuse API
-        DatamuseCaller caller = new DatamuseCaller();
-        DatamuseQuery animalQuery = (new DatamuseQuery())
-                .withinTopicHint("animal","mammal");
-        List<DatamuseWord> animalWords = caller.call(animalQuery);
+
+        DatamuseAPIParser animalDatamuseAPIParser = new DatamuseAPIParser(
+                "topics",
+                new String[]{"animal", "mammal"});
+        String[] animalWords = animalDatamuseAPIParser.getWords();
         //less than 11 letter
 
-        DatamuseQuery foodQuery = (new DatamuseQuery())
-                .withinTopicHint("food","snack","dinner","lunch");
-        List<DatamuseWord> foodWords = caller.call(foodQuery);
+        DatamuseAPIParser foodDatamuseAPIParser = new DatamuseAPIParser(
+                "topics",
+                new String[]{"food","snack","dinner","lunch"});
+        String[] foodWords = foodDatamuseAPIParser.getWords();
         //more than 3 and less than 11
 
-        DatamuseQuery stateQuery = (new DatamuseQuery())
-                .withinTopicHint("state","United States");
-        List<DatamuseWord> stateWords = caller.call(stateQuery);
+        DatamuseAPIParser stateDatamuseAPIParser = new DatamuseAPIParser(
+                "topics",
+                new String[]{"state","United States"});
+        String[] stateWords = stateDatamuseAPIParser.getWords();
         //chose until 43 and size less than 11
         //size - 57 for random function that would be the max and min is of course 0
 
         //think for case where no internet therefore list is empty have default word to take over
 
-        if (animalWords.size() > 0) {
+        if (animalWords.length > 0) {
             while (animalsCategory_WordOne == null && animalsCategory_WordTwo == null && animalsCategory_WordThree == null) {
                 if (animalsCategory_WordOne == null) {
-                    int randomNum = getRandomInRange(0, animalWords.size());
-                    String wordPick = animalWords.get(randomNum).getWord();
+                    int randomNum = getRandomInRange(0, animalWords.length);
+                    String wordPick = animalWords[randomNum];
                     if (!(wordPick.length() > 10)) {
                         if (!((animalsCategory_WordTwo != null && animalsCategory_WordTwo.equals(wordPick)) ||
                                 (animalsCategory_WordThree != null && animalsCategory_WordThree.equals(wordPick)))) {
                             //make sure other two doesn't have the same word
-                            animalsCategory_WordOne = animalWords.get(randomNum).getWord().toLowerCase();
+                            animalsCategory_WordOne = animalWords[randomNum].toLowerCase();
                             animalsCategory_WordOneArray = new char[animalsCategory_WordOne.length()];
                         }
                     }
                 }
 
                 if (animalsCategory_WordTwo == null) {
-                    int randomNum = getRandomInRange(0, animalWords.size());
-                    String wordPick = animalWords.get(randomNum).getWord();
+                    int randomNum = getRandomInRange(0, animalWords.length);
+                    String wordPick = animalWords[randomNum];
                     if (!(wordPick.length() > 10)) {
                         if (!((animalsCategory_WordOne != null && animalsCategory_WordOne.equals(wordPick)) ||
                                 (animalsCategory_WordThree != null && animalsCategory_WordThree.equals(wordPick)))) {
                             //make sure other two doesn't have the same word
-                            animalsCategory_WordTwo = animalWords.get(randomNum).getWord().toLowerCase();
+                            animalsCategory_WordTwo = animalWords[randomNum].toLowerCase();
                             animalsCategory_WordTwoArray = new char[animalsCategory_WordTwo.length()];
                         }
                     }
                 }
 
                 if (animalsCategory_WordThree == null) {
-                    int randomNum = getRandomInRange(0, animalWords.size());
-                    String wordPick = animalWords.get(randomNum).getWord();
+                    int randomNum = getRandomInRange(0, animalWords.length);
+                    String wordPick = animalWords[randomNum];
                     if (!(wordPick.length() > 10)) {
                         if (!((animalsCategory_WordOne != null && animalsCategory_WordOne.equals(wordPick)) ||
                                 (animalsCategory_WordTwo != null && animalsCategory_WordTwo.equals(wordPick)))) {
                             //make sure other two doesn't have the same word
-                            animalsCategory_WordThree = animalWords.get(randomNum).getWord().toLowerCase();
+                            animalsCategory_WordThree = animalWords[randomNum].toLowerCase();
                             animalsCategory_WordThreeArray = new char[animalsCategory_WordThree.length()];
                         }
                     }
@@ -141,42 +140,42 @@ public class ServerSideGameInfo implements Serializable {
             animalsCategory_WordThreeArray = new char[animalsCategory_WordThree.length()];
         }
 
-        if (foodWords.size() > 0) {
+        if (foodWords.length > 0) {
             while (foodCategory_WordOne == null && foodCategory_WordTwo == null && foodCategory_WordThree == null) {
                 if (foodCategory_WordOne == null) {
-                    int randomNum = getRandomInRange(0, foodWords.size());
-                    String wordPick = foodWords.get(randomNum).getWord();
+                    int randomNum = getRandomInRange(0, foodWords.length);
+                    String wordPick = foodWords[randomNum];
                     if (!(wordPick.length() > 10 || wordPick.length() < 4)) {
                         if (!((foodCategory_WordTwo != null && foodCategory_WordTwo.equals(wordPick)) ||
                                 (foodCategory_WordThree != null && foodCategory_WordThree.equals(wordPick)))) {
                             //make sure other two doesn't have the same word
-                            foodCategory_WordOne = foodWords.get(randomNum).getWord().toLowerCase();
+                            foodCategory_WordOne = foodWords[randomNum].toLowerCase();
                             foodCategory_WordOneArray = new char[foodCategory_WordOne.length()];
                         }
                     }
                 }
 
                 if (foodCategory_WordTwo == null) {
-                    int randomNum = getRandomInRange(0, foodWords.size());
-                    String wordPick = foodWords.get(randomNum).getWord();
+                    int randomNum = getRandomInRange(0, foodWords.length);
+                    String wordPick = foodWords[randomNum];
                     if (!(wordPick.length() > 10 || wordPick.length() < 4)) {
                         if (!((foodCategory_WordOne != null && foodCategory_WordOne.equals(wordPick)) ||
                                 (foodCategory_WordThree != null && foodCategory_WordThree.equals(wordPick)))) {
                             //make sure other two doesn't have the same word
-                            foodCategory_WordTwo = foodWords.get(randomNum).getWord().toLowerCase();
+                            foodCategory_WordTwo = foodWords[randomNum].toLowerCase();
                             foodCategory_WordTwoArray = new char[foodCategory_WordTwo.length()];
                         }
                     }
                 }
 
                 if (foodCategory_WordThree == null) {
-                    int randomNum = getRandomInRange(0, foodWords.size());
-                    String wordPick = foodWords.get(randomNum).getWord();
+                    int randomNum = getRandomInRange(0, foodWords.length);
+                    String wordPick = foodWords[randomNum];
                     if (!(wordPick.length() > 10 || wordPick.length() < 4)) {
                         if (!((foodCategory_WordTwo != null && foodCategory_WordTwo.equals(wordPick)) ||
                                 (foodCategory_WordOne != null && foodCategory_WordOne.equals(wordPick)))) {
                             //make sure other two doesn't have the same word
-                            foodCategory_WordThree = foodWords.get(randomNum).getWord().toLowerCase();
+                            foodCategory_WordThree = foodWords[randomNum].toLowerCase();
                             foodCategory_WordThreeArray = new char[foodCategory_WordThree.length()];
                         }
                     }
@@ -191,16 +190,16 @@ public class ServerSideGameInfo implements Serializable {
             foodCategory_WordThreeArray = new char[foodCategory_WordThree.length()];
         }
 
-        if (stateWords.size() > 0) {
+        if (stateWords.length > 0) {
             while (statesCategory_WordOne == null && statesCategory_WordTwo == null && statesCategory_WordThree == null) {
                 if (statesCategory_WordOne == null) {
                     int randomNum = getRandomInRange(0, 43);
-                    String wordPick = stateWords.get(randomNum).getWord();
+                    String wordPick = stateWords[randomNum];
                     if (!(wordPick.length() > 10 || wordPick.length() < 4)) {
                         if (!((statesCategory_WordTwo != null && statesCategory_WordTwo.equals(wordPick)) ||
                                 (statesCategory_WordThree != null && statesCategory_WordThree.equals(wordPick)))) {
                             //make sure other two doesn't have the same word
-                            statesCategory_WordOne = stateWords.get(randomNum).getWord().toLowerCase();
+                            statesCategory_WordOne = stateWords[randomNum].toLowerCase();
                             statesCategory_WordOneArray = new char[statesCategory_WordOne.length()];
                         }
                     }
@@ -208,12 +207,12 @@ public class ServerSideGameInfo implements Serializable {
 
                 if (statesCategory_WordTwo == null) {
                     int randomNum = getRandomInRange(0, 43);
-                    String wordPick = stateWords.get(randomNum).getWord();
+                    String wordPick = stateWords[randomNum];
                     if (!(wordPick.length() > 10 || wordPick.length() < 4)) {
                         if (!((statesCategory_WordThree != null && statesCategory_WordThree.equals(wordPick)) ||
                                 (statesCategory_WordOne != null && statesCategory_WordOne.equals(wordPick)))) {
                             //make sure other two doesn't have the same word
-                            statesCategory_WordTwo = stateWords.get(randomNum).getWord().toLowerCase();
+                            statesCategory_WordTwo = stateWords[randomNum].toLowerCase();
                             statesCategory_WordTwoArray = new char[statesCategory_WordTwo.length()];
                         }
                     }
@@ -221,12 +220,12 @@ public class ServerSideGameInfo implements Serializable {
 
                 if (statesCategory_WordThree == null) {
                     int randomNum = getRandomInRange(0, 43);
-                    String wordPick = stateWords.get(randomNum).getWord();
+                    String wordPick = stateWords[randomNum];
                     if (!(wordPick.length() > 10)) {
                         if (!((statesCategory_WordTwo != null && statesCategory_WordTwo.equals(wordPick)) ||
                                 (statesCategory_WordOne != null && statesCategory_WordOne.equals(wordPick)))) {
                             //make sure other two doesn't have the same word
-                            statesCategory_WordThree = stateWords.get(randomNum).getWord().toLowerCase();
+                            statesCategory_WordThree = stateWords[randomNum].toLowerCase();
                             statesCategory_WordThreeArray = new char[statesCategory_WordThree.length()];
                         }
                     }

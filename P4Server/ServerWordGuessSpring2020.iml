@@ -29,5 +29,14 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:12" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:12" level="project" />
     <orderEntry type="library" name="Maven: com.google.collections:google-collections:1.0" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/json-simple-1.1.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

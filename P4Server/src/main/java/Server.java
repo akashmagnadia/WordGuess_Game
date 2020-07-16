@@ -1,3 +1,5 @@
+import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -43,7 +45,7 @@ public class Server {
                 }
 
             } //end of try
-            catch (IOException e) {
+            catch (IOException | ParseException e) {
                 e.printStackTrace();
             }
         }
@@ -57,7 +59,7 @@ public class Server {
             ServerSideGameInfo serverSideClientInfo;
             ClientSideGameInfo clientSideClientInfo;
 
-            ClientThread(Socket socket, int clientCount) throws IOException {
+            ClientThread(Socket socket, int clientCount) throws IOException, ParseException {
                 this.connection = socket;
 
                 this.serverSideClientInfo = new ServerSideGameInfo();
@@ -68,7 +70,7 @@ public class Server {
             }
 
             //TODO: Needs rework for play again or quit button
-            public void cleanClientsInfo() throws IOException {
+            public void cleanClientsInfo() throws IOException, ParseException {
                 for(int i = 0; i < clients.size(); i++) {
                     ClientThread thread = clients.get(i);
 
