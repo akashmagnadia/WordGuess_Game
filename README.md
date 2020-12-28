@@ -20,6 +20,9 @@ The client must guess the correct word before the six guesses run out.
 If the client loses three rounds consecutively, the client loses the game.
 If the client is able to guess at least one word from each category, the client wins the game.
 
+**Added Feature(s)**
+In this game, I am using a java class to parse Datamuse API to fetch words related to the three categories. In the case when the API response isn't successful the server falls back on words already assigned to each categories.
+
 **How to install this program on your computer** 
 <br/>
 Download the file for the
