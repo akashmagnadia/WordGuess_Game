@@ -12,26 +12,26 @@ public class DatamuseAPIParser {
     String[] words;
 
     public DatamuseAPIParser(String code, String[] hints) throws IOException, ParseException {
-        String urlString = "https://api.datamuse.com/words?" + code + "=";
+        StringBuilder urlString = new StringBuilder("https://api.datamuse.com/words?" + code + "=");
 
         for (int i = 0; i < hints.length; i++) {
             hints[i] = hints[i].replaceAll(" ", "+");
             if (i == hints.length - 1) {
-                urlString+=(hints[i]);
+                urlString.append(hints[i]);
             } else {
-                urlString+=(hints[i] + ",");
+                urlString.append(hints[i]).append(",");
             }
 
         }
 
-        URL url = new URL(urlString);
+        URL url = new URL(urlString.toString());
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestMethod("GET");
         conn.connect();
 
         int responsecode = conn.getResponseCode();
 
-        String inline = "";
+        StringBuilder inline = new StringBuilder();
         if(responsecode != 200) {
             throw new RuntimeException("HttpResponseCode: " + responsecode);
         }
@@ -40,15 +40,13 @@ public class DatamuseAPIParser {
             Scanner sc = new Scanner(url.openStream());
             while(sc.hasNext())
             {
-                inline+=sc.nextLine();
+                inline.append(sc.nextLine());
             }
-//            System.out.println("\nJSON data in string format");
-//            System.out.println(inline);
             sc.close();
         }
 
         JSONParser parser = new JSONParser();
-        Object obj = parser.parse(inline);
+        Object obj = parser.parse(inline.toString());
         JSONArray jsonArray = (JSONArray) obj;
 
         //initlize words array
